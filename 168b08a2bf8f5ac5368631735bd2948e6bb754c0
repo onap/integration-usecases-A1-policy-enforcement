@@ -1,0 +1,7 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Bartek Grzybowski <b.grzybowski@partner.samsung.com>
+Submitted-by: Morgan Richomme <morgan.richomme@orange.com>
+Submitted-at: Wed, 07 Apr 2021 17:29:04 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/integration/usecases/A1-policy-enforcement/+/120195
+Project: integration/usecases/A1-policy-enforcement
+Branch: refs/heads/master
