@@ -1,0 +1,58 @@
+#
+# ============LICENSE_START====================================================
+# =============================================================================
+# Copyright (c) 2020 © Samsung Electronics Co., Ltd.
+# =============================================================================
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============LICENSE_END=====================================================
+
+tosca_definitions_version: cloudify_dsl_1_3
+imports:
+  - https://www.getcloudify.org/spec/cloudify/4.5.5/types.yaml
+  - plugin:k8splugin?version=3.4.2
+inputs:
+  service_id:
+    type: string
+    description: service id
+    default: "rapp-sleepingcelldetector-service"
+  image:
+    type: string
+    description: docker image name and version
+    default: "nexus3.onap.org:10001/onap/sleepingcelldetector/sleepingcelldetector:0.0.1-SNAPSHOT"
+
+node_templates:
+  rapp-sleepingcelldetector:
+    type: dcae.nodes.ContainerizedServiceComponent
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            envs:
+              A1_PROTOCOL: "http"
+              A1_HOST: "a1policymanagement"
+              A1_PORT: "8081"
+              A1_URL: "policy"
+              DATACOLLECTOR_PROTOCOL: "http"
+              DATACOLLECTOR_HOST: "rapp-datacollector"
+              DATACOLLECTOR_PORT: "8087"
+              DATACOLLECTOR_VERSION: "v1"
+              SLEEPINGCELLDETECTOR_PREFIX: "emergency"
+              SLEEPINGCELLDETECTOR_SLOT: "10"
+              SLEEPINGCELLDETECTOR_COUNT: "12"
+    properties:
+      service_component_type: "rapp-sleepingcelldetector"
+      service_component_name_override: "rapp-sleepingcelldetector"
+      service_id:
+        get_input: service_id
+      image:
+        get_input: image
