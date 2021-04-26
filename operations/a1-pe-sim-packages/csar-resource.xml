@@ -1,0 +1,43 @@
+<!--
+  ~ Copyright (C) 2021 Samsung Electronics
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License
+  -->
+
+<assembly>
+  <id>oran-sim-cnf-csar</id>
+  <formats>
+    <format>zip</format>
+  </formats>
+  <includeBaseDirectory>false</includeBaseDirectory>
+  <fileSets>
+    <fileSet>
+      <directory>resources/oran-sim-csar/</directory>
+      <excludes>
+        <!-- This directory is already packed earlier -->
+        <exclude>o-ran-simulator/</exclude>
+        <!-- And we don't want to include any vim swapfiles -->
+        <exclude>.*.swp</exclude>
+      </excludes>
+      <outputDirectory>/</outputDirectory>
+    </fileSet>
+  </fileSets>
+  <files>
+    <file>
+      <source>target/oran-sim-helm.tar.gz</source>
+      <outputDirectory>/</outputDirectory>
+      <destName>o-ran-simulator_cloudtech_k8s_charts.tgz</destName>
+    </file>
+    <file>
+      <source>target/oran-sim-cba.zip</source>
+      <outputDirectory>/</outputDirectory>
+    </file>
+  </files>
+</assembly>

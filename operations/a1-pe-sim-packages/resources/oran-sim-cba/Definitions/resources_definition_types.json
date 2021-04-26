@@ -1,0 +1,548 @@
+{
+  "aic-cloud-region": {
+    "tags": "aic-cloud-region",
+    "name": "aic-cloud-region",
+    "property": {
+      "description": "aic-cloud-region",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input",
+        "properties": {}
+      },
+      "sdnc": {
+        "type": "source-rest",
+        "properties": {
+          "verb": "GET",
+          "type": "JSON",
+          "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-request-input",
+          "path": "/vnf-request-input/aic-cloud-region",
+          "input-key-mapping": {
+            "service-instance-id": "service-instance-id",
+            "vnf-id": "vnf-id"
+          },
+          "output-key-mapping": {
+            "aic-cloud-region": "aic-cloud-region"
+          },
+          "key-dependencies": [
+            "service-instance-id",
+            "vnf-id"
+          ]
+        }
+      }
+    }
+  },
+  "cells-payload": {
+    "tags": "cells-payload",
+    "name": "cells-payload",
+    "property": {
+      "description": "Cells topology json config",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Konrad Banka <k.banka@samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  },
+  "externalNodeIp": {
+    "tags": "externalNodeIp",
+    "name": "externalNodeIp",
+    "property": {
+      "description": "Host name or IP address for VNF Event Stream (VES) collector in ONAP DCAE",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Samuli, Silvius <s.silvius@partner.samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  },
+  "oran_name": {
+    "tags": "oran_name",
+    "name": "oran_name",
+    "property": {
+      "description": "ORAN name",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "L.K.",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  },
+  "service-instance-id": {
+    "tags": "service-instance-id, tosca.datatypes.Root, data_type",
+    "name": "service-instance-id",
+    "property": {
+      "description": "To be provided",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input",
+        "properties": {}
+      },
+      "any-db": {
+        "type": "source-db",
+        "properties": {
+          "query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+          "input-key-mapping": {},
+          "output-key-mapping": {
+            "service-instance-id": "artifact_name"
+          }
+        }
+      },
+      "processor-db": {
+        "type": "source-db",
+        "properties": {
+          "query": "SELECT artifact_name FROM BLUEPRINT_RUNTIME where artifact_version=\"1.0.0\"",
+          "input-key-mapping": {},
+          "output-key-mapping": {
+            "service-instance-id": "artifact_name"
+          }
+        }
+      },
+      "capability": {
+        "type": "source-capability",
+        "properties": {
+          "script-type": "jython",
+          "script-class-reference": "SampleRAProcessor",
+          "instance-dependencies": []
+        }
+      },
+      "sdnc": {
+        "type": "source-rest",
+        "properties": {
+          "verb": "GET",
+          "type": "JSON",
+          "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id",
+          "path": "/service/0/service-instance-id",
+          "input-key-mapping": {
+            "service-instance-id": "service-instance.service-instance-id"
+          },
+          "output-key-mapping": {
+            "service-instance-id": "service-instance-id"
+          },
+          "key-dependencies": [
+            "service-instance.service-instance-id"
+          ]
+        }
+      }
+    }
+  },
+  "ues-payload": {
+    "tags": "ues-payload",
+    "name": "ues-payload",
+    "property": {
+      "description": "User Equipment json config",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Konrad Banka <k.banka@samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  },
+  "ves-password": {
+    "tags": "ves, dcae",
+    "name": "ves-password",
+    "property": {
+      "description": "Ves password",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Lasse Kaihlavirta <l.kaihlavirt@partner.samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  },
+  "ves-port": {
+    "tags": "ves-port",
+    "name": "ves-port",
+    "property": {
+      "description": "Port for VNF Event Stream (VES) collector in ONAP DCAE.",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Lasse Kaihlavirta <l.kaihlavirt@partner.samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  },
+  "ves-user": {
+    "tags": "ves, dcae",
+    "name": "ves-user",
+    "property": {
+      "description": "Username for VNF Event Stream (VES) collector in ONAP DCAE.",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Lasse Kaihlavirta <l.kaihlavirt@partner.samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  },
+  "vf-module-id": {
+    "tags": "vf-module-id",
+    "name": "vf-module-id",
+    "property": {
+      "description": "vf-module-id",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input",
+        "properties": {}
+      }
+    }
+  },
+  "vf-module-label": {
+    "tags": "vf-module-label",
+    "name": "vf-module-label",
+    "property": {
+      "description": "vf-module-label",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      },
+      "processor-db": {
+        "type": "source-db",
+        "properties": {
+          "type": "SQL",
+          "query": "select sdnctl.VF_MODULE_MODEL.vf_module_label as vf_module_label from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
+          "input-key-mapping": {
+            "customizationid": "vf-module-model-customization-uuid"
+          },
+          "output-key-mapping": {
+            "vf-module-label": "vf_module_label"
+          },
+          "key-dependencies": [
+            "vf-module-model-customization-uuid"
+          ]
+        }
+      }
+    }
+  },
+  "vf-module-model-customization-uuid": {
+    "tags": "vf-module-model-customization-uuid",
+    "name": "vf-module-model-customization-uuid",
+    "property": {
+      "description": "vf-module-model-customization-uuid",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  },
+  "vf-naming-policy": {
+    "tags": "vf-naming-policy",
+    "name": "vf-naming-policy",
+    "property": {
+      "description": "vf-naming-policy",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Robert Bogacki <r.bogacki@samsung.com>",
+    "sources": {
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      },
+      "sdnc": {
+        "type": "source-rest",
+        "properties": {
+          "verb": "GET",
+          "type": "JSON",
+          "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vf-naming-policy",
+          "path": "/param/0/value",
+          "input-key-mapping": {
+            "service-instance-id": "service-instance-id",
+            "vnf-id": "vnf-id"
+          },
+          "output-key-mapping": {
+            "vf-naming-policy": "value"
+          },
+          "key-dependencies": [
+            "service-instance-id",
+            "vnf-id"
+          ]
+        }
+      },
+      "processor-db": {
+        "type": "source-db",
+        "properties": {
+          "type": "SQL",
+          "query": "select sdnctl.VF_MODEL.naming_policy as vf_naming_policy from sdnctl.VF_MODEL where sdnctl.VF_MODEL.customization_uuid=:vnf_model_customization_uuid",
+          "input-key-mapping": {
+            "vnf_model_customization_uuid": "vnf-model-customization-uuid"
+          },
+          "output-key-mapping": {
+            "vf-naming-policy": "vf_naming_policy"
+          },
+          "key-dependencies": [
+            "vnf-model-customization-uuid"
+          ]
+        }
+      }
+    }
+  },
+  "vnf-id": {
+    "tags": "vnf-id",
+    "name": "vnf-id",
+    "property": {
+      "description": "vnf-id",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      },
+      "sdnc": {
+        "type": "source-rest",
+        "properties": {
+          "verb": "GET",
+          "type": "JSON",
+          "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/",
+          "path": "/vnf/0/vnf-id",
+          "input-key-mapping": {
+            "service-instance-id": "service-instance-id",
+            "vnf-id": "generic-vnf.vnf-id"
+          },
+          "output-key-mapping": {
+            "vnf-id": "vnf-id"
+          },
+          "key-dependencies": [
+            "service-instance-id",
+            "generic-vnf.vnf-id"
+          ]
+        }
+      }
+    }
+  },
+  "vnf-ip-address": {
+    "tags": "vnf-ip-address",
+    "name": "vnf-ip-address",
+    "property": {
+      "description": "vnf-ip-address",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Robert Bogacki <r.bogacki@samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      },
+      "sdnc": {
+        "type": "source-rest",
+        "properties": {
+          "verb": "GET",
+          "type": "JSON",
+          "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf-ip-address",
+          "path": "/param/0/value",
+          "input-key-mapping": {
+            "service-instance-id": "service-instance-id",
+            "vnf-id": "vnf-id"
+          },
+          "output-key-mapping": {
+            "vnf-ip-address": "value"
+          },
+          "key-dependencies": [
+            "service-instance-id",
+            "vnf-id"
+          ]
+        }
+      },
+      "aai-data": {
+        "type": "source-rest",
+        "properties": {
+          "verb": "GET",
+          "type": "JSON",
+          "url-path": "/aai/v19/network/generic-vnfs/generic-vnf/$vnf-id",
+          "path": "",
+          "input-key-mapping": {
+            "vnf-id": "vnf-id"
+          },
+          "output-key-mapping": {
+            "ipv4-oam-address": "ipv4-oam-address"
+          },
+          "key-dependencies": [
+            "vnf-id"
+          ]
+        }
+      }
+    }
+  },
+  "vnf-name": {
+    "tags": "vnf-name",
+    "name": "vnf-name",
+    "property": {
+      "description": "vnf-name",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Robert Bogacki <r.bogacki@samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      },
+      "sdnc": {
+        "type": "source-rest",
+        "properties": {
+          "verb": "GET",
+          "type": "JSON",
+          "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name",
+          "path": "/param/0/value",
+          "input-key-mapping": {
+            "service-instance-id": "service-instance-id",
+            "vnf-id": "vnf-id"
+          },
+          "output-key-mapping": {
+            "vnf_name": "value"
+          },
+          "key-dependencies": [
+            "service-instance-id",
+            "vnf-id"
+          ]
+        }
+      }
+    }
+  },
+  "vnf-type": {
+    "tags": "vnf-type",
+    "name": "vnf-type",
+    "property": {
+      "description": "vnf-type",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Robert Bogacki <r.bogacki@samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  },
+  "vnf_name": {
+    "tags": "vnf_name",
+    "name": "vnf_name",
+    "property": {
+      "description": "vnf_name",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      },
+      "sdnc": {
+        "type": "source-rest",
+        "properties": {
+          "verb": "GET",
+          "type": "JSON",
+          "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/vnf-data/vnf-topology/vnf-parameters-data/param/vnf_name",
+          "path": "/param/0/value",
+          "input-key-mapping": {
+            "service-instance-id": "service-instance-id",
+            "vnf-id": "vnf-id"
+          },
+          "output-key-mapping": {
+            "vnf_name": "value"
+          },
+          "key-dependencies": [
+            "service-instance-id",
+            "vnf-id"
+          ]
+        }
+      }
+    }
+  }
+}

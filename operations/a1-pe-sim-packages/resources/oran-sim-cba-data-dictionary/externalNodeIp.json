@@ -1,0 +1,27 @@
+{
+  "name": "externalNodeIp",
+  "tags": "externalNodeIp",
+  "data_type": "string",
+  "description": "Host name or IP address for VNF Event Stream (VES) collector in ONAP DCAE",
+  "entry_schema": "string",
+  "updatedBy": "Samuli, Silvius <s.silvius@partner.samsung.com>",
+  "definition": {
+    "tags": "externalNodeIp",
+    "name": "externalNodeIp",
+    "property": {
+      "description": "Host name or IP address for VNF Event Stream (VES) collector in ONAP DCAE",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Samuli, Silvius <s.silvius@partner.samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  }
+}
