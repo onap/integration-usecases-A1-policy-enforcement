@@ -1,0 +1,26 @@
+{
+  "name": "ne-id",
+  "tags": "ne-id",
+  "data_type": "string",
+  "description": "Network id",
+  "entry_schema": "string",
+  "updatedBy": "Robert Bogacki <r.bogacki@samsung.com>",
+  "definition": {
+    "tags": "ne-id",
+    "name": "ne-id",
+    "property": {
+      "description": "Network id",
+      "type": "string"
+    },
+    "updated-by": "Robert Bogacki <r.bogacki@samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  }
+}

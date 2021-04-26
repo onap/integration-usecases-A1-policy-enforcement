@@ -1,0 +1,25 @@
+{
+  "tags": "ues-payload",
+  "name": "ues-payload",
+  "data_type": "string",
+  "entry_schema": "string",
+  "updatedBy": "Konrad Banka <k.banka@samsung.com>",
+  "definition": {
+    "tags": "ues-payload",
+    "name": "ues-payload",
+    "property": {
+      "description": "User Equipment json config",
+      "type": "string"
+    },
+    "updated-by": "Konrad Banka <k.banka@samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  }
+}

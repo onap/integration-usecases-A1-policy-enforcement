@@ -1,0 +1,8 @@
+TOSCA-Meta-File-Version: 0.0.1
+CSAR-Version: 1.0
+Created-By: Lasse Kaihlavirta
+Entry-Definitions: Definitions/oran-sim-blueprint.json
+Template-Name: oran_simulator_for_phase3
+Template-Version: 1.3.2
+Template-Tags: samsung, oran
+Content-Type: application/vnd.oasis.bpmn

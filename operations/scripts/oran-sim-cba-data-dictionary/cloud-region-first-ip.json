@@ -1,0 +1,47 @@
+{
+  "name": "cloud-region-first-ip",
+  "tags": "cloud-region-first-ip",
+  "data_type": "string",
+  "description": "External node IP for VNF",
+  "entry_schema": "string",
+  "updatedBy": "Grzegorz Wielgosinski <g.wielgosins@samsung.com>",
+  "definition": {
+    "tags": "cloud-region-first-ip",
+    "name": "cloud-region-first-ip",
+    "property": {
+      "description": "External node IP for VNF",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Grzegorz Wielgosinski <g.wielgosins@samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      },
+      "aai-data": {
+        "type": "source-rest",
+        "properties": {
+          "verb": "GET",
+          "type": "JSON",
+          "url-path": "/aai/v19/cloud-infrastructure/cloud-regions/cloud-region/$cloud-owner/$aic-cloud-region/vip-ipv4-address-list",
+          "path": "/vip-ipv4-address",
+          "input-key-mapping": {
+            "cloud-owner": "cloud-owner",
+            "aic-cloud-region": "aic-cloud-region"
+          },
+          "output-key-mapping": {
+            "cloud-region-first-ip": "vip-ipv4-address"
+          },
+          "key-dependencies": [
+            "cloud-owner",
+            "aic-cloud-region"
+          ]
+        }
+      }
+    }
+  }
+}

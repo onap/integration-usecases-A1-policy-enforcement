@@ -1,0 +1,164 @@
+{
+  "data_types" : {
+    "dt-config-assign-properties" : {
+      "description" : "Dynamic DataType definition for workflow(config-assign).",
+      "version" : "1.0.0",
+      "properties" : {
+        "vnf-id" : {
+          "type" : "string"
+        },
+        "ves-port" : {
+          "type" : "string",
+          "default" : "30417"
+        },
+        "service-instance-id" : {
+          "type" : "string"
+        },
+        "ues-payload" : {
+          "type" : "string",
+          "default" : ""
+        },
+        "aic-cloud-region" : {
+          "type" : "string"
+        },
+        "externalNodeIp" : {
+          "type" : "string"
+        },
+        "vnf-type" : {
+          "type" : "string",
+          "default" : "oran-sim-type"
+        },
+        "ves-password" : {
+          "type" : "string",
+          "default" : "sample1"
+        },
+        "vnf-ip-address" : {
+          "type" : "string"
+        },
+        "cloud-owner" : {
+          "type" : "string",
+          "default" : "CloudOwner"
+        },
+        "cells-payload" : {
+          "type" : "string",
+          "default" : ""
+        },
+        "ves-user" : {
+          "type" : "string",
+          "default" : "sample1"
+        },
+        "vnf-name" : {
+          "type" : "string",
+          "default" : "oran-sim-name"
+        },
+        "cloud-region-first-ip" : {
+          "type" : "string"
+        },
+        "cloud_region_type" : {
+          "type" : "string"
+        }
+      },
+      "derived_from" : "tosca.datatypes.Dynamic"
+    },
+    "dt-resource-assignment-properties" : {
+      "description" : "Dynamic DataType definition for workflow(resource-assignment).",
+      "version" : "1.0.0",
+      "properties" : {
+        "vnf-ip-address" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "default" : "${vnf-ip-address}",
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vnf-id" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "service-instance-id" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vnf_name" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vf-module-id" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "aic-cloud-region" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "oran_name" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "default" : "${oran_name}",
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vf-module-label" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string"
+        },
+        "vf-naming-policy" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "default" : "SDNC_Policy.ONAP_NF_NAMING_TIMESTAMP",
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vf-module-model-customization-uuid" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string"
+        }
+      },
+      "derived_from" : "tosca.datatypes.Dynamic"
+    }
+  }
+}

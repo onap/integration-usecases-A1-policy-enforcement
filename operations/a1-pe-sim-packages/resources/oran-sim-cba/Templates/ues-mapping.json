@@ -1,0 +1,13 @@
+[
+  {
+    "name": "ues-payload",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "default": ""
+    },
+    "dictionary-name": "ues-payload",
+    "dictionary-source": "default",
+    "dependencies": []
+  }
+]

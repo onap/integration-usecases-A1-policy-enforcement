@@ -1,0 +1,27 @@
+{
+  "name": "ves-port",
+  "tags": "ves-port",
+  "data_type": "string",
+  "description": "Port for VNF Event Stream (VES) collector in ONAP DCAE.",
+  "entry_schema": "string",
+  "updatedBy": "Lasse Kaihlavirta <l.kaihlavirt@partner.samsung.com>",
+  "definition": {
+    "tags": "ves-port",
+    "name": "ves-port",
+    "property": {
+      "description": "Port for VNF Event Stream (VES) collector in ONAP DCAE.",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Lasse Kaihlavirta <l.kaihlavirt@partner.samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  }
+}

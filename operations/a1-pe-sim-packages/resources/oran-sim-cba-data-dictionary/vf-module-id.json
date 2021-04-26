@@ -1,0 +1,23 @@
+{
+  "name": "vf-module-id",
+  "tags": "vf-module-id",
+  "data_type": "string",
+  "description": "vf-module-id",
+  "entry_schema": "string",
+  "updatedBy": "Singal, Kapil <ks220y@att.com>",
+  "definition": {
+    "tags": "vf-module-id",
+    "name": "vf-module-id",
+    "property": {
+      "description": "vf-module-id",
+      "type": "string"
+    },
+    "updated-by": "Singal, Kapil <ks220y@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input",
+        "properties": {}
+      }
+    }
+  }
+}

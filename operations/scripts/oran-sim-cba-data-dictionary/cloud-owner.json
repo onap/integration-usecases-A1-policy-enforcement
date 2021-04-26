@@ -1,0 +1,24 @@
+{
+  "name": "cloud-owner",
+  "tags": "cloud-owner",
+  "data_type": "string",
+  "description": "cloud-owner",
+  "entry_schema": "string",
+  "updatedBy": "Grzegorz Wielgosinski <g.wielgosins@samsung.com>",
+  "definition": {
+    "tags": "cloud-owner",
+    "name": "cloud-owner",
+    "property": {
+      "description": "cloud-owner",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Grzegorz Wielgosinski <g.wielgosins@samsung.com>",
+    "sources": {
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  }
+}

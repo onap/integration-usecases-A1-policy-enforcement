@@ -1,0 +1,47 @@
+{
+  "name": "cloud_region_type",
+  "tags": "cloud_region_type",
+  "data_type": "string",
+  "description": "Cloud region type",
+  "entry_schema": "string",
+  "updatedBy": "Grzegorz Wielgosinski <g.wielgosins@samsung.com>",
+  "definition": {
+    "tags": "cloud_region_type",
+    "name": "cloud_region_type",
+    "property": {
+      "description": "Cloud region type",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Grzegorz Wielgosinski <g.wielgosins@samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      },
+      "aai-data": {
+        "type": "source-rest",
+        "properties": {
+          "verb": "GET",
+          "type": "JSON",
+          "url-path": "/aai/v19/cloud-infrastructure/cloud-regions/cloud-region/$cloud-owner/$aic-cloud-region",
+          "path": "/cloud-type",
+          "input-key-mapping": {
+            "cloud-owner": "cloud-owner",
+            "aic-cloud-region": "aic-cloud-region"
+          },
+          "output-key-mapping": {
+            "cloud_region_type": "cloud-type"
+          },
+          "key-dependencies": [
+            "cloud-owner",
+            "aic-cloud-region"
+          ]
+        }
+      }
+    }
+  }
+}

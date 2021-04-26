@@ -1,0 +1,13 @@
+{{/* Set up subresource name */}}
+{{- $spec := .Values.a1pesimulator -}}
+{{- $name := $spec.name -}}
+{{- $input := dict "dot" . "name" $name "spec" $spec }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "handover-simulator.utils.name" (list .Release.Name $name "app-cm") }}
+  labels: {{ include "handover-simulator.utils.labels" $input | nindent 4 }}
+data: #Initial data is empty as it will be populated by CDS at runtime
+  vnf.config:
+  cells.json:
+  ue.json:

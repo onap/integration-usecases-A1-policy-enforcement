@@ -1,0 +1,47 @@
+{
+  "name": "vnf-id",
+  "tags": "vnf-id",
+  "data_type": "string",
+  "description": "vnf-id",
+  "entry_schema": "string",
+  "updatedBy": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+  "definition": {
+    "tags": "vnf-id",
+    "name": "vnf-id",
+    "property": {
+      "description": "vnf-id",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      },
+      "sdnc": {
+        "type": "source-rest",
+        "properties": {
+          "verb": "GET",
+          "type": "JSON",
+          "url-path": "/restconf/config/GENERIC-RESOURCE-API:services/service/$service-instance-id/service-data/vnfs/vnf/$vnf-id/",
+          "path": "/vnf/0/vnf-id",
+          "input-key-mapping": {
+            "service-instance-id": "service-instance-id",
+            "vnf-id": "generic-vnf.vnf-id"
+          },
+          "output-key-mapping": {
+            "vnf-id": "vnf-id"
+          },
+          "key-dependencies": [
+            "service-instance-id",
+            "generic-vnf.vnf-id"
+          ]
+        }
+      }
+    }
+  }
+}

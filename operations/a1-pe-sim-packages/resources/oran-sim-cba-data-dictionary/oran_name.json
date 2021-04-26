@@ -1,0 +1,26 @@
+{
+  "name": "oran_name",
+  "tags": "oran_name",
+  "data_type": "string",
+  "description": "ORAN name",
+  "entry_schema": "string",
+  "updatedBy": "L.K.",
+  "definition": {
+    "tags": "oran_name",
+    "name": "oran_name",
+    "property": {
+      "description": "ORAN name",
+      "type": "string"
+    },
+    "updated-by": "L.K.",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  }
+}
