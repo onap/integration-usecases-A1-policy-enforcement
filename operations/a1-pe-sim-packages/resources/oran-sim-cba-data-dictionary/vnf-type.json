@@ -1,0 +1,27 @@
+{
+  "name": "vnf-type",
+  "tags": "vnf-type",
+  "data_type": "string",
+  "description": "vnf-type",
+  "entry_schema": "string",
+  "updatedBy": "Robert Bogacki <r.bogacki@samsung.com>",
+  "definition": {
+    "tags": "vnf-type",
+    "name": "vnf-type",
+    "property": {
+      "description": "vnf-type",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Robert Bogacki <r.bogacki@samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  }
+}

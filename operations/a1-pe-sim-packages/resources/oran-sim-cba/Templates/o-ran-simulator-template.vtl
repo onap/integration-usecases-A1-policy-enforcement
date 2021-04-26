@@ -1,0 +1,61 @@
+{
+  "resource-accumulator-resolved-data": [
+     {
+       "param-name": "k8s-rb-instance-release-name",
+       "param-value": "default"
+     }
+  ],
+  "capability-data": [
+    {
+      "capability-name": "generate-name",
+      "key-mapping": [
+        {
+          "payload": [
+            {
+              "param-name": "VF_MODULE_TYPE",
+              "param-value": "vfmt"
+            },
+            {
+              "param-name": "resource-name",
+              "param-value": "oran_name"
+            },
+            {
+              "param-name": "resource-value",
+              "param-value": "${oran_name}"
+            },
+            {
+              "param-name": "external-key",
+              "param-value": "${vf-module-id}_oran_name"
+            },
+            {
+              "param-name": "policy-instance-name",
+              "param-value": "${vf-naming-policy}"
+            },
+            {
+              "param-name": "naming-type",
+              "param-value": "VF-MODULE"
+            },
+            {
+              "param-name": "VNF_NAME",
+              "param-value": "${vnf_name}"
+            },
+            {
+              "param-name": "VF_MODULE_LABEL",
+              "param-value": "${vf-module-label}"
+            },
+            {
+              "param-name": "NFC_NAMING_CODE",
+              "param-value": "ORAN"
+            }
+          ],
+          "output-key-mapping": [
+            {
+              "resource-name": "oran_name",
+              "resource-value": "${oran_name}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

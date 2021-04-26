@@ -1,0 +1,30 @@
+# Default values for handover-simulator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+#To easier define node ports:
+backendRESTNodePort: 32766
+a1NodePort: 32085
+
+#oran_name can be provided from onap and will set custom label
+oran_name: null
+
+a1pesimulator:
+  name: a1-pe-simulator
+  replicaCount: 1
+  containers:
+    backend:
+      image:
+        repository: nexus3.onap.org:10001/onap/integration/simulators/a1-pe-simulator
+        tag: latest
+        pullPolicy: Always
+      volumeMounts:
+        - name: config
+          mountPath: /var/a1pesim
+  service:
+    type: NodePort
+    ports:
+      - port: 9998
+        name: a1-pe-simulator-http
+        owner: a1pesimulator
+        nodePort: "{{ .Values.backendRESTNodePort }}"

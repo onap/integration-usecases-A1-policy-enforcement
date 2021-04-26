@@ -1,0 +1,9 @@
+a1-pe-simulator:
+  image: "onap/integration/simulators/a1-pe-simulator:latest"
+  container_name: a1-pe-simulator
+  ports:
+    - "9998:9998"
+  volumes:
+    - ./configuration:/var/a1pesim
+  environment:
+    A1_BACKEND_HOST: a1-simulator
