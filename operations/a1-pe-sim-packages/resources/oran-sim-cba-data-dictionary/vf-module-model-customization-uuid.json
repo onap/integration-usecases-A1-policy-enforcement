@@ -1,0 +1,27 @@
+{
+  "name": "vf-module-model-customization-uuid",
+  "tags": "vf-module-model-customization-uuid",
+  "data_type": "string",
+  "description": "vf-module-model-customization-uuid",
+  "entry_schema": "string",
+  "updatedBy": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+  "definition": {
+    "tags": "vf-module-model-customization-uuid",
+    "name": "vf-module-model-customization-uuid",
+    "property": {
+      "description": "vf-module-model-customization-uuid",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "MALAKOV, YURIY <yuriy.malakov@att.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  }
+}

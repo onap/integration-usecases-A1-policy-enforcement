@@ -1,0 +1,19 @@
+{
+  "name": "SamsungORANSimulator",
+  "description": "ORAN Simulator; Samsung Electronics.",
+  "data": [
+    {
+      "file": "oran-sim-cba.zip",
+      "type": "CONTROLLER_BLUEPRINT_ARCHIVE"
+    },
+    {
+      "file": "o-ran-simulator.yml",
+      "type": "HEAT",
+      "isBase": "true"
+    },
+    {
+      "file": "o-ran-simulator_cloudtech_k8s_charts.tgz",
+      "type": "CLOUD_TECHNOLOGY_SPECIFIC_ARTIFACT"
+    }
+  ]
+}

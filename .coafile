@@ -2,7 +2,8 @@
 bears = YAMLLintBear
 yamllint_config = .yamllint
 ignore =
-  .tox/**
+  .tox/**,
+  operations/a1-pe-sim-packages/resources/oran-sim-csar/o-ran-simulator/templates/*
 
 [json]
 bears = JSONFormatBear
@@ -27,3 +28,4 @@ ignore =
 bears = MarkdownBear
 ignore =
   .tox/**
+

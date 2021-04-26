@@ -1,0 +1,25 @@
+{
+  "tags": "cells-payload",
+  "name": "cells-payload",
+  "data_type": "string",
+  "entry_schema": "string",
+  "updatedBy": "Konrad Banka <k.banka@samsung.com>",
+  "definition": {
+    "tags": "cells-payload",
+    "name": "cells-payload",
+    "property": {
+      "description": "Cells topology json config",
+      "type": "string"
+    },
+    "updated-by": "Konrad Banka <k.banka@samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  }
+}

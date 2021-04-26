@@ -1,0 +1,77 @@
+[
+  {
+    "name": "vnf-id",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "vnf-id",
+    "dictionary-source": "input",
+    "dependencies": []
+  },
+  {
+    "name": "vnf-name",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "default": "oran-sim-name"
+    },
+    "dictionary-name": "vnf-name",
+    "dictionary-source": "default",
+    "dependencies": []
+  },
+  {
+    "name": "vnf-type",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "default": "oran-sim-type"
+    },
+    "dictionary-name": "vnf-type",
+    "dictionary-source": "default",
+    "dependencies": []
+  },
+  {
+    "name": "externalNodeIp",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "externalNodeIp",
+    "dictionary-source": "input",
+    "dependencies": []
+  },
+  {
+    "name": "ves-port",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "default": "30417"
+    },
+    "dictionary-name": "ves-port",
+    "dictionary-source": "default",
+    "dependencies": []
+  },
+  {
+    "name": "ves-user",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "default": "sample1"
+    },
+    "dictionary-name": "ves-user",
+    "dictionary-source": "default",
+    "dependencies": []
+  },
+  {
+    "name": "ves-password",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "default": "sample1"
+    },
+    "dictionary-name": "ves-password",
+    "dictionary-source": "default",
+    "dependencies": []
+  }
+]
