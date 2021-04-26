@@ -1,0 +1,80 @@
+#
+# ============LICENSE_START====================================================
+# =============================================================================
+# Copyright (c) 2020 © Samsung Electronics Co., Ltd.
+# =============================================================================
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ============LICENSE_END=====================================================
+
+tosca_definitions_version: cloudify_dsl_1_3
+imports:
+  - https://www.getcloudify.org/spec/cloudify/4.5.5/types.yaml
+  - plugin:k8splugin?version=3.4.2
+inputs:
+  service_id:
+    type: string
+    description: service id
+    default: "rapp-datacollector-service"
+  image:
+    type: string
+    description: docker image name and version
+    default: "nexus3.onap.org:10001/onap/datacollector/datacollector:0.0.1-SNAPSHOT"
+  database_host:
+    type: string
+    description: Database host.
+    default: "mariadb-galera"
+  database_username:
+    type: string
+    description: Database username.
+    default: "root"
+  database_password:
+    type: string
+    description: Database password.
+    # Detect: kubectl get secret `kubectl get secrets | grep mariadb-galera-db-root-password | awk '{print $1}'` -o jsonpath="{.data.password}" | base64 --decode
+    default: "DepdDuza6%Venu"
+  dmaap_host:
+    type: string
+    description: DMaaP host.
+    default: "message-router"
+  ves_measurements_topic_name:
+    type: string
+    default: "unauthenticated.VES_MEASUREMENT_OUTPUT"
+
+
+node_templates:
+  rapp-datacollector:
+    type: dcae.nodes.ContainerizedServiceComponent
+    interfaces:
+      cloudify.interfaces.lifecycle:
+        start:
+          inputs:
+            envs:
+              DMAAP_HOST: { get_input: dmaap_host }
+              DMAAP_PORT: "3904"
+              DMAAP_PROTOCOL: "http"
+              # "events/unauthenticated.VES_MEASUREMENT_OUTPUT/mygroup/mycus"
+              DMAAP_MEASUREMENTS_TOPIC: {concat: ["events/", { get_input: ves_measurements_topic_name }, "/mygroup/mycus"]}
+              DATABASE_HOST: { get_input: database_host }
+              DATABASE_PORT: "3306"
+              DATABASE_NAME: "ves"
+              DATABASE_USERNAME: { get_input: database_username }
+              DATABASE_PASSWORD: { get_input: database_password }
+            ports:
+              - "8087:30980"
+    properties:
+      service_component_type: "rapp-datacollector"
+      service_component_name_override: "rapp-datacollector"
+      service_id:
+        get_input: service_id
+      image:
+        get_input: image
