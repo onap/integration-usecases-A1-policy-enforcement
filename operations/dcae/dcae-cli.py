@@ -13,14 +13,15 @@ https://git.onap.org/ccsdk/dashboard/tree/ccsdk-app-os/src/main/resources/swagge
 """
 import argparse
 import base64
+import json
+import os
+import re
+import sys
+import time
+from datetime import datetime
 
 import requests
-import json
 import yaml
-import time
-import os
-import sys
-import re
 
 try:
     from urllib.parse import quote
@@ -64,10 +65,9 @@ def print_rows_formatted(matrix):
         print("".join(word.ljust(col_width) for word in row))
     print
 
-def epoch_2_date(epoch):
-    if len(epoch) > 10:
-        epoch = epoch[:10]
-    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(float(epoch)))
+
+def str_2_date(_str):
+    return datetime.strptime(_str, '%Y-%m-%dT%H:%M:%S.%fZ').strftime('%Y-%m-%d %H:%M:%S')
 
 
 def create_filter(_filter):
@@ -162,7 +162,7 @@ def list_deployments():
     data = [list_headers]
     if "items" in r_json:
         for dep in r_json["items"]:
-            row = [dep['service_id'], epoch_2_date(dep['created']), epoch_2_date(dep['modified'])]
+            row = [dep['id'], str_2_date(dep['created_at']), str_2_date(dep['updated_at'])]
             data.append(row)
             print_rows_formatted(data)
     print("Total " + str(total_items) + " deployments.")
@@ -281,15 +281,16 @@ def wait_deployment(deployment_id, operation, timeout=240):
     def get_workflow_id(deployment_id, operation):
         r = executions_status(deployment_id, args.tenant)
         print_get_payload(r)
+        print("Get status for operation: %s" % operation)
         return get_executions_items(r, "workflow_id", operation)
 
     failed = False
-    result = ""
     op_timeout = Timeout(timeout, "deployment " + deployment_id + " operation " + operation)
     while True:
         wf = get_workflow_id(deployment_id, operation)
-        if not wf:
+        if wf:
             status = wf[0]["status"]
+            print("Operation status is %s" % status)
             if status in ["terminated", "failed"]:
                 result = "SUCCESS" if status == "terminated" else "FAILED"
                 if status == "failed":

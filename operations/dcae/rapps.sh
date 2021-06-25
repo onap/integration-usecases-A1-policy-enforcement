@@ -50,7 +50,14 @@ case "$operation" in
         rapp_filter=$2
         # Create inputs. Currently the only input to be provided is database password and that is only
         # applicable for datacollector r-app at the moment;
-        . ./inputs_database_password.sh
+        if [[ -z ${DATABASE_PASSWORD:-} ]]; then
+          echo "DATABASE_PASSWORD value is missing!"
+          echo "Run: "
+          echo "\"kubectl get secret \`kubectl get secrets | grep mariadb-galera-db-root-password | awk '{print \$1}'\` -o jsonpath="{.data.password}" | base64 --decode\" in the ONAP k8s"
+          echo "and after that export DATABASE_PASSWORD=\${command_out}"
+          exit 1
+        fi
+
         deployment_inputs="database_password=${DATABASE_PASSWORD}"
         do_deploy() {
             local blueprint_file=$1
