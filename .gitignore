@@ -79,3 +79,4 @@ local.properties
 .apt_generated_test/
 
 !operations/a1-pe-sim-packages/resources/oran-sim-cba/Templates/k8s-profiles
+!doc/files
