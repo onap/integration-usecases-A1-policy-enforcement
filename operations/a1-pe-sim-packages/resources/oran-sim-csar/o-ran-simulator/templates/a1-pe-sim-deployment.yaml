@@ -1,0 +1,22 @@
+{{/* Set up subresource name */}}
+  {{- $spec := .Values.a1pesimulator -}}
+  {{- $name := $spec.name -}}
+  {{- $input := dict "dot" . "name" $name "spec" $spec }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "handover-simulator.utils.name" (list .Release.Name $name) }}
+  labels: {{ include "handover-simulator.utils.labels" $input | nindent 4 }}
+spec:
+  replicas: {{ $spec.replicaCount }}
+  selector:
+    matchLabels: {{ include "handover-simulator.utils.labels" $input | nindent 6 }}
+  template:
+    metadata:
+      labels: {{ include "handover-simulator.utils.labels" $input | nindent 8 }}
+    spec:
+      containers: {{ include "handover-simulator.deployment.containers" $input | nindent 8 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "handover-simulator.utils.name" (list .Release.Name $name "app-cm") }}

@@ -17,5 +17,6 @@ Assumptions:
 
 Repository contain:
 
+- operations/a1-pe-sim-package - folder that provides the CBA, HELM_CHARTS, CSAR for A1-PE simulator as a CNF
 - operations/dcae - DCAE CLI that deploys RAPPs in the DCAE framework
 - operations/scripts - helper scripts to support the use case

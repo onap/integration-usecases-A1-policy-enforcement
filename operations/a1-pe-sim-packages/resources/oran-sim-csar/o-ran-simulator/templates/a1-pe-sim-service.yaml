@@ -1,0 +1,23 @@
+{{/* Set up subresource name */}}
+  {{- $spec := .Values.a1pesimulator -}}
+  {{- $name := $spec.name -}}
+  {{- $input := dict "dot" . "name" $name "spec" $spec }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "handover-simulator.utils.name" (list .Release.Name $name) }}
+  labels: {{ include "handover-simulator.utils.labels" $input | nindent 4 }}
+spec:
+  type: {{ $spec.service.type }}
+  ports:
+    {{- range $spec.service.ports }}
+    - port: {{ .port }}
+      targetPort: {{ .port }}
+      protocol: TCP
+      name: {{ .name }}
+      {{- with .nodePort }}
+      nodePort: {{ tpl . $ }}
+  {{- end }}
+  {{- end }}
+  selector: {{ include "handover-simulator.utils.labels" $input | nindent 4 }}
+

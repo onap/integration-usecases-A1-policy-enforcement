@@ -1,0 +1,13 @@
+[
+  {
+    "name": "cells-payload",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "default": ""
+    },
+    "dictionary-name": "cells-payload",
+    "dictionary-source": "default",
+    "dependencies": []
+  }
+]
