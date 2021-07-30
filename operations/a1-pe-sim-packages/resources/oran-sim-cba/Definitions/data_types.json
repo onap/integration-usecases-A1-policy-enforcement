@@ -4,6 +4,10 @@
       "description": "Dynamic DataType definition for workflow(config-assign).",
       "version": "1.0.0",
       "properties": {
+        "rep-period": {
+          "type": "string",
+          "default": "60"
+        },
         "vnf-id": {
           "type": "string"
         },
