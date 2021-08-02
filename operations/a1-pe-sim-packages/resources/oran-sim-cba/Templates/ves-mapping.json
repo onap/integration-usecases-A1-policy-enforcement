@@ -75,6 +75,27 @@
     "dependencies": []
   },
   {
+    "name": "ftp-host",
+    "input-param": true,
+    "property": {
+      "type": "string"
+    },
+    "dictionary-name": "ftp-host",
+    "dictionary-source": "input",
+    "dependencies": []
+  },
+  {
+    "name": "ftp-port",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "default": "32022"
+    },
+    "dictionary-name": "ftp-port",
+    "dictionary-source": "default",
+    "dependencies": []
+  },
+  {
     "name": "rep-period",
     "input-param": true,
     "property": {
