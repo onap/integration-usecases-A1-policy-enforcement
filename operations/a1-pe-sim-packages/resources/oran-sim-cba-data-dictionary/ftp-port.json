@@ -1,0 +1,27 @@
+{
+  "name": "ftp-port",
+  "tags": "oran, a1pesim",
+  "data_type": "string",
+  "description": "Port value of the FTP server",
+  "entry_schema": "string",
+  "updatedBy": "Krystian Kedron <k.kedron@partner.samsung.com>",
+  "definition": {
+    "tags": "oran, a1pesim",
+    "name": "ftp-port",
+    "property": {
+      "description": "Port value of the FTP server",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Krystian Kedron <k.kedron@partner.samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  }
+}

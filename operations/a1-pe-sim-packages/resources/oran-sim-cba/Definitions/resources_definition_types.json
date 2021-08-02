@@ -73,6 +73,44 @@
       }
     }
   },
+  "ftp-host": {
+    "tags": "oran, a1pesim",
+    "name": "ftp-host",
+    "property": {
+      "description": "Host address of the FTP server",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Krystian Kedron <k.kedron@partner.samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  },
+  "ftp-port": {
+    "tags": "oran, a1pesim",
+    "name": "ftp-port",
+    "property": {
+      "description": "Port value of the FTP server",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Krystian Kedron <k.kedron@partner.samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      }
+    }
+  },
   "oran_name": {
     "tags": "oran_name",
     "name": "oran_name",

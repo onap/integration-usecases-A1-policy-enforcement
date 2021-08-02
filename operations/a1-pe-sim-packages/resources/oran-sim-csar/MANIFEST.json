@@ -1,6 +1,6 @@
 {
-  "name": "SamsungORANSimulator",
-  "description": "ORAN Simulator; Samsung Electronics.",
+  "name": "Samsung A1 PE Simulator",
+  "description": "A1 PE Simulator; Samsung Electronics.",
   "data": [
     {
       "file": "oran-sim-cba.zip",
