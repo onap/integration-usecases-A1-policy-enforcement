@@ -19,7 +19,7 @@
 tosca_definitions_version: cloudify_dsl_1_3
 imports:
   - https://www.getcloudify.org/spec/cloudify/4.5.5/types.yaml
-  - plugin:k8splugin?version=3.4.2
+  - plugin:k8splugin?version=>=3.4.3,<4.0.0
 inputs:
   service_id:
     type: string
@@ -28,7 +28,7 @@ inputs:
   image:
     type: string
     description: docker image name and version
-    default: "nexus3.onap.org:10001/onap/sleepingcelldetector/sleepingcelldetector:0.0.1-SNAPSHOT"
+    default: "nexus3.onap.org:10001/onap/integration/usecase/a1-policy-enforcement/sleepingcelldetector"
 
 node_templates:
   rapp-sleepingcelldetector:
