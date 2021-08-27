@@ -210,26 +210,43 @@ update config-map with information about A1 PE Simulator:
     data:
       application_configuration.json: |
         {
-          "config": {
-            "controller": [
-              {
-                "name": "controller1",
-                "baseUrl": "https://sdnc.onap:8443",
-                "userName": "admin",
-                "password": "Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U"
+           "config":{
+              "controller":[
+                 {
+                    "name":"controller1",
+                    "baseUrl":"https://sdnc.onap:8443",
+                    "userName":"admin",
+                    "password":"Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U"
+                 }
+              ],
+              "ric":[
+                 {
+                    "name":"ric1",
+                    "baseUrl":"http://{{k8s}}:32766/v1",
+                    "controller":"controller1",
+                    "managedElementIds":[
+                    ]
+                 }
+              ],
+              "streams_publishes":{
+                  "dmaap_publisher":{
+                    "type":"message_router",
+                    "dmaap_info":{
+                       "topic_url":"http://message-router:3904/events/A1-POLICY-AGENT-WRITE"
+                    }
+                 }
+              },
+              "streams_subscribes":{
+                 "dmaap_subscriber":{
+                    "type":"message_router",
+                    "dmaap_info":{
+                       "topic_url":"http://message-router:3904/events/A1-POLICY-AGENT-READ/users/policy-agent?timeout=15000&limit=100"
+                    }
+                 }
               }
-            ],
-            "ric": [
-              {
-                "name": "ric1",
-                "baseUrl": "http://${{k8s}}:32482/v1",
-                "controller": "controller1",
-                "managedElementIds": [
-                ]
-              }
-            ]
-          }
+           }
         }
+
 
 
 2. Deploy RAPPs
@@ -254,7 +271,8 @@ Next use this password to deploy RAPPs
 ::
 
     export NODE_IP=${{k8s}}
-    ./rapps.sh DepdDuza6%Venu[
+    export DATABASE_PASSWORD=kf93BWV9
+    ./rapps.sh deploy
 
 The expected result is to have two DCAE MS up and working:
 
@@ -279,7 +297,17 @@ Executing the A1 PE Closed-loop
     Postman -> A1-PE-CLOSED-LOOP -> [STEP 1] Configure the policy type
     Postman -> A1-PE-CLOSED-LOOP -> [TEST] Get policy types
     Postman -> A1-PE-CLOSED-LOOP -> [TEST] RIC healthcheck
-    Postman -> A1-PE-CLOSED-LOOP -> [STEP 2] Start sending normal VES
+    Postman -> A1-PE-CLOSED-LOOP -> [STEP 2] Cell - start reporting
+
+In A1-PE-CNF.postman_environment.json is define as a VARIABLES:
+
+=====================  ===================
+Variable               Description
+---------------------  -------------------
+reportingMethod        Enum(FILE_READY - pm bulk file reporting potion, VES - legacy mode with sending events)
+cellId                 cell identifier
+=====================  ===================
+
 
 Sending the VES message for cell1 should started. To see more details about this process please check the `A1 Policy Enforcement Simulator README`_
 To trigger the A1 Closed loop, we must provide UE performance information for Sleeping Cell Detector that the cell can be in the sleeping mode in the near feature.
@@ -289,7 +317,7 @@ To do that we can start seeding the fault ves events (with worst UE performance 
 
 ::
 
-    Postman -> A1-PE-CLOSED-LOOP -> [STEP 3] Start sending fault VES
+    Postman -> A1-PE-CLOSED-LOOP -> [STEP 3] Cell - start sending fault values
 
 After 1 minute we should see in the Sleeping Cell Detector RAPP logs:
 
@@ -367,7 +395,7 @@ We can also stop sending the VES events for this cell:
 
 ::
 
-    Postman -> A1-PE-CLOSED-LOOP -> [STEP 4] Stop sending fault VES
+    Postman -> A1-PE-CLOSED-LOOP -> [STEP 4] Cell - stop reporting
 
 2-2 A1 PE Closed-loop - A1 policy deletion
 ..........................................
@@ -378,7 +406,7 @@ To delete create A1 policy a user can send the normal ves event for *SLEEPING* c
 
 ::
 
-    Postman -> A1-PE-CLOSED-LOOP -> [STEP 2] Start sending normal VES
+    Postman -> A1-PE-CLOSED-LOOP -> [STEP 2] Cell - start reporting
 
 Sleeping Cell Detector should be able to recognize that the Cell1 is *ACTIVE* again and delete the A1 Policy Instance that was created.
 
