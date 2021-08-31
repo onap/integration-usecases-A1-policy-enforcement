@@ -24,6 +24,14 @@
       value: {{ tpl .value $dot.dot | quote }}
     {{- end }}
   {{- end }}
+  {{- with $containerSpec.command }}
+  command:
+    - {{ $containerSpec.command }}
+  {{- end }}
+  {{- with $containerSpec.args }}
+  args:
+    - {{ $containerSpec.args }}
+  {{- end }}
   {{- with $containerSpec.volumeMounts }}
   volumeMounts:
     {{- range $containerSpec.volumeMounts }}

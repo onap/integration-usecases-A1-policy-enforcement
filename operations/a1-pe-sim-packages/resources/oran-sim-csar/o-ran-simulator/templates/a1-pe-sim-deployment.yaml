@@ -20,3 +20,5 @@ spec:
         - name: config
           configMap:
             name: {{ include "handover-simulator.utils.name" (list .Release.Name $name "app-cm") }}
+        - name: pmfiles
+          emptyDir: {}

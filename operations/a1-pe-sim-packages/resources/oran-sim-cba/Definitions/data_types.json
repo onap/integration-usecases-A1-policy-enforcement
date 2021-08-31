@@ -11,6 +11,13 @@
         "vnf-id": {
           "type": "string"
         },
+        "ftp-host": {
+          "type": "string"
+        },
+        "ftp-port": {
+          "type": "string",
+          "default": "32022"
+        },
         "cells-payload": {
           "type": "string",
           "default": ""

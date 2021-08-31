@@ -4,27 +4,43 @@
 
 #To easier define node ports:
 backendRESTNodePort: 32766
-a1NodePort: 32085
+managementNodePort: 32022
 
-#oran_name can be provided from onap and will set custom label
+#oran_name can be provided from ONAP and will set custom label
 oran_name: null
 
 a1pesimulator:
   name: a1-pe-simulator
   replicaCount: 1
   containers:
-    backend:
+    a1-simulator:
       image:
         repository: nexus3.onap.org:10001/onap/integration/simulators/a1-pe-simulator
         tag: latest
         pullPolicy: Always
       volumeMounts:
         - name: config
-          mountPath: /var/a1pesim
+          mountPath: /a1-pe-simulator/config
+        - name: pmfiles
+          mountPath: /a1-pe-simulator/generated_pm_bulks
+    sftp:
+      image:
+        repository: atmoz/sftp
+        tag: latest
+        pullPolicy: Always
+      command: ./entrypoint
+      args: admin:samsung:::upload
+      volumeMounts:
+        - name: pmfiles
+          mountPath: /home/admin/upload
   service:
     type: NodePort
     ports:
       - port: 9998
-        name: a1-pe-simulator-http
-        owner: a1pesimulator
+        name: a1-sim-http
+        owner: a1-simulator
         nodePort: "{{ .Values.backendRESTNodePort }}"
+      - port: 22
+        owner: sftp
+        name: sftp-1
+        nodePort: "{{ .Values.managementNodePort }}"
