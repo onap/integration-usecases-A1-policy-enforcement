@@ -19,7 +19,7 @@
 tosca_definitions_version: cloudify_dsl_1_3
 imports:
   - https://www.getcloudify.org/spec/cloudify/4.5.5/types.yaml
-  - plugin:k8splugin?version=3.4.2
+  - plugin:k8splugin?version=>=3.4.3,<4.0.0
 inputs:
   service_id:
     type: string
@@ -28,7 +28,7 @@ inputs:
   image:
     type: string
     description: docker image name and version
-    default: "nexus3.onap.org:10001/onap/datacollector/datacollector:0.0.1-SNAPSHOT"
+    default: "nexus3.onap.org:10001/onap/integration/usecase/a1-policy-enforcement/datacollector"
   database_host:
     type: string
     description: Database host.
@@ -46,9 +46,9 @@ inputs:
     type: string
     description: DMaaP host.
     default: "message-router"
-  ves_measurements_topic_name:
+  ves_measurements_topics_name:
     type: string
-    default: "unauthenticated.VES_MEASUREMENT_OUTPUT"
+    default: "events/unauthenticated.VES_MEASUREMENT_OUTPUT/mygroup/mycus, events/org.onap.dmaap.mr.PERFORMANCE_MEASUREMENTS/mygroup/mycus"
 
 
 node_templates:
@@ -62,8 +62,7 @@ node_templates:
               DMAAP_HOST: { get_input: dmaap_host }
               DMAAP_PORT: "3904"
               DMAAP_PROTOCOL: "http"
-              # "events/unauthenticated.VES_MEASUREMENT_OUTPUT/mygroup/mycus"
-              DMAAP_MEASUREMENTS_TOPIC: {concat: ["events/", { get_input: ves_measurements_topic_name }, "/mygroup/mycus"]}
+              DMAAP_MEASUREMENTS_TOPICS: { get_input: ves_measurements_topics_name }
               DATABASE_HOST: { get_input: database_host }
               DATABASE_PORT: "3306"
               DATABASE_NAME: "ves"
