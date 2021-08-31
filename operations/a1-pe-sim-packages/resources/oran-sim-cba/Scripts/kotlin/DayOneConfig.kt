@@ -16,14 +16,12 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 * limitations under the License.
 */
 
-
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import java.io.File
 import java.nio.file.Path
 import java.nio.file.Paths
-import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.apache.http.client.ClientProtocolException
 import org.apache.http.client.entity.EntityBuilder
@@ -36,9 +34,9 @@ import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientSe
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.RestLoggerService
 import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractScriptComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.BluePrintProcessorException
+import org.onap.ccsdk.cds.controllerblueprints.core.BlueprintProcessorException
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.ArchiveType
-import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
+import org.onap.ccsdk.cds.controllerblueprints.core.utils.BlueprintArchiveUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
 import org.springframework.http.HttpHeaders
@@ -52,8 +50,6 @@ import java.nio.file.Files
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.storedContentFromResolvedArtifactNB
-import org.onap.ccsdk.cds.blueprintsprocessor.services.execution.AbstractComponentFunction
-import org.onap.ccsdk.cds.controllerblueprints.core.service.BluePrintDependencyService
 
 open class DayOneConfig : AbstractScriptComponentFunction() {
 
@@ -64,7 +60,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
-        log.info("DAY-1 Script execution started")
+        log.info("DAY-1 Script excution Started")
 
         val baseK8sApiUrl = getDynamicProperties("api-access").get("url").asText()
         val k8sApiUsername = getDynamicProperties("api-access").get("username").asText()
@@ -82,7 +78,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 
         log.info("Get vnfID $vnfID")
 
-        val vnfUrl = aaiApiUrl + "/aai/v19/network/generic-vnfs/generic-vnf/" + vnfID + "/vf-modules";
+        val vnfUrl = aaiApiUrl + "/aai/v19/network/generic-vnfs/generic-vnf/" + vnfID + "/vf-modules"
 
         val mapOfHeaders = hashMapOf<String, String>()
         mapOfHeaders.put("Accept", "application/json")
@@ -132,11 +128,12 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 
                 val k8sConfigTemplateName = "template_$vfModuleID"
 
-                val api = K8sConfigTemplateApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleInvariantID, vfModuleUUID, k8sConfigTemplateName)
+                val configApi = K8sConfigTemplateApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleInvariantID, vfModuleUUID, k8sConfigTemplateName)
+                val instanceApi = K8sInstanceApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleInvariantID, vfModuleUUID, instanceID)
 
                 // Check if definition exists
-                if (!api.hasDefinition()) {
-                    throw BluePrintProcessorException("K8s Config Template ($vfModuleInvariantID/$vfModuleUUID) -  $k8sConfigTemplateName not found ")
+                if (!configApi.hasDefinition()) {
+                    throw BlueprintProcessorException("K8s Config Template ($vfModuleInvariantID/$vfModuleUUID) -  $k8sConfigTemplateName not found ")
                 }
 
                 log.info("Config Template name: $k8sConfigTemplateName")
@@ -145,18 +142,17 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                 log.info("configmap retrieved " + typOfVfmodule + " vfmodule -> " + configmapName)
                 modifyTemplate(configmapName, typOfVfmodule)
 
-
                 var configTemplate = K8sConfigTemplate()
                 configTemplate.templateName = k8sConfigTemplateName
                 configTemplate.description = " "
                 configTemplate.ChartName = typOfVfmodule
                 log.info("Chart name: ${configTemplate.ChartName}")
 
-                if (!api.hasConfigTemplate(configTemplate)) {
+                if (!configApi.hasConfigTemplate(configTemplate)) {
                     log.info("K8s Config Template Upload Started")
-                    api.createConfigTemplate(configTemplate)
+                    configApi.createConfigTemplate(configTemplate)
                     val configTemplateFile: Path = prepareConfigTemplateJson()
-                    api.uploadConfigTemplateContent(configTemplate, configTemplateFile)
+                    configApi.uploadConfigTemplateContent(configTemplate, configTemplateFile)
                     log.info("K8s Config Template Upload Completed")
                     val configName = "config_1"
                     val config = K8sConfigPayloadJson()
@@ -167,16 +163,14 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                     config.values.topic.ues = getUes()
                     config.values.topic.cells = getCells()
 
-                    log.info("config $config.values.topic")
+                    log.info("config ${config.values.topic}")
 
-                    api.createOrUpdateConfig(config, k8sRbProfileName)
+                    instanceApi.createOrUpdateConfig(config, k8sRbProfileName)
                 }
             }
-            log.info("DAY-1 Script execution completed")
+            log.info("DAY-1 Script excution completed")
         } catch (e: Exception) {
-            log.info("Caught exception executing day one operation: ")
-            log.info("${e}")
-            // throw BluePrintProcessorException("${e.message}")
+            log.info("Caught exception trying to get the vnf Details!!")
         }
     }
 
@@ -189,7 +183,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         return ues
     }
 
-    suspend fun getVes(): String{
+    suspend fun getVes(): String {
         val resolutionKey = getDynamicProperties("resolution-key").asText()
 
         val ves = storedContentFromResolvedArtifactNB(resolutionKey, "ves")
@@ -217,14 +211,14 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         val profileFile = profileFilePath.toFile()
 
         if (!profileFile.exists())
-            throw BluePrintProcessorException("K8s Profile template file $profileFilePath does not exists")
+            throw BlueprintProcessorException("K8s Profile template file $profileFilePath does not exists")
 
         return profileFilePath
     }
 
     override suspend fun recoverNB(runtimeException: RuntimeException, executionRequest: ExecutionServiceInput) {
         log.info("Executing Recovery")
-        bluePrintRuntimeService.getBluePrintError().addError("${runtimeException.message}")
+        bluePrintRuntimeService.getBlueprintError().addError("${runtimeException.message}", "recoverNB")
     }
 
     fun modifyTemplate(configmapName: String, typOfVfmodule: String): String {
@@ -238,27 +232,25 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 
         var templateFilePath: Path = Paths.get(bluePrintBasePath.plus(File.separator).plus("Templates").plus(File.separator).plus("k8s-profiles").plus(File.separator).plus("cnf-config-template.tar.gz"))
 
-        log.info("Reading config template file: ${templateFilePath}")
+        log.info("Reading config template file: $templateFilePath")
         val templateFile = templateFilePath.toFile()
 
         if (!templateFile.exists())
-            throw BluePrintProcessorException("K8s Profile template file ${templateFilePath} does not exists")
+            throw BlueprintProcessorException("K8s Profile template file $templateFilePath does not exists")
 
-        log.info("Purging ${destPath} before decompression")
+        log.info("Decompressing config template to $destPath")
 
-        FileUtils.deleteQuietly(File(destPath))
+        val decompressedProfile: File = BlueprintArchiveUtils.deCompress(
+                templateFilePath.toFile(),
+                "$destPath", ArchiveType.TarGz
+        )
 
-        log.info("Decompressing config template to ${destPath}")
+        log.info("$templateFilePath decompression completed")
 
-        val decompressedProfile: File = BluePrintArchiveUtils.deCompress(templateFilePath.toFile(),
-                "${destPath}", ArchiveType.TarGz)
-
-        log.info("${templateFilePath.toString()} decompression completed")
-
-        //Here we update override.yaml file
+        // Here we update override.yaml file
 
         val manifestFileName = destPath.plus(File.separator).plus(typOfVfmodule).plus(File.separator).plus("templates").plus(File.separator).plus("configmap.yaml")
-        log.info("Modification of configmap.yaml file at ${manifestFileName.toString()}")
+        log.info("Modification of configmap.yaml file at $manifestFileName")
         var finalManifest = ""
         File(manifestFileName).bufferedReader().use { inr ->
             try {
@@ -266,7 +258,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                 val manifestObject: Map<String, Any> = manifestYaml.load(inr)
 
                 for ((k, v) in manifestObject) {
-                    log.info("manifestObject: ${k}, ${v}")
+                    log.info("manifestObject: $k, $v")
                 }
 
                 log.info("Uploaded YAML object")
@@ -280,7 +272,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 
                 finalManifest = manifestYaml.dump(manifestObject)
             } catch (e: Exception) {
-                log.info("Error during parsing the configmap.yaml: ${e}")
+                log.info("Error during parsing the configmap.yaml: $e")
             }
         }
 
@@ -288,35 +280,40 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 
         log.info(finalManifest)
 
-        log.info("Reading config template file: ${templateFilePath}")
+        log.info("Reading config template file: $templateFilePath")
 
         if (!templateFile.exists())
-            throw BluePrintProcessorException("config template file ${templateFilePath} does not exists")
+            throw BlueprintProcessorException("config template file $templateFilePath does not exists")
 
         val tempMainPath: File = createTempDir("config-template-", "")
         val tempConfigTemplatePath: File = createTempDir("conftemplate-", "", tempMainPath)
-        log.info("Decompressing profile to ${tempConfigTemplatePath.toString()}")
+        log.info("Decompressing profile to $tempConfigTemplatePath")
 
-        val decompressedProfile2: File = BluePrintArchiveUtils.deCompress(templateFilePath.toFile(),
-                "${tempConfigTemplatePath.toString()}", ArchiveType.TarGz)
+        val decompressedProfile2: File = BlueprintArchiveUtils.deCompress(
+                templateFilePath.toFile(),
+                "$tempConfigTemplatePath", ArchiveType.TarGz
+        )
 
-        log.info("${templateFilePath.toString()} decompression completed")
+        log.info("$templateFilePath decompression completed")
 
-        //Here we update configmap.yaml file
+        // Here we update configmap.yaml file
 
         log.info("Modification of configmap.yaml file ")
         val manifestFileName2 = destPath.toString().plus(File.separator).plus(typOfVfmodule).plus(File.separator).plus("templates").plus(File.separator).plus("configmap.yaml")
         val destOverrideFile = tempConfigTemplatePath.toString().plus(File.separator).plus(typOfVfmodule).plus(File.separator).plus("templates").plus(File.separator).plus("configmap.yaml")
-        log.info("destination override file ${destOverrideFile}")
+        log.info("destination override file $destOverrideFile")
 
         File(manifestFileName2).copyTo(File(destOverrideFile), true)
 
-        if (!BluePrintArchiveUtils.compress(decompressedProfile2, templateFilePath.toFile(),
-                        ArchiveType.TarGz)) {
-            throw BluePrintProcessorException("Profile compression has failed")
+        if (!BlueprintArchiveUtils.compress(
+                        decompressedProfile2, templateFilePath.toFile(),
+                        ArchiveType.TarGz
+                )
+        ) {
+            throw BlueprintProcessorException("Profile compression has failed")
         }
 
-        log.info("${templateFilePath.toString()} compression completed")
+        log.info("$templateFilePath compression completed")
 
         return ""
     }
@@ -326,7 +323,8 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
             val password: String,
             val baseUrl: String,
             val definition: String,
-            val definitionVersion: String
+            val definitionVersion: String,
+            val instanceID: String
     ) {
         private val service: UploadConfigTemplateRestClientService // BasicAuthRestClientService
 
@@ -339,7 +337,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
             var basicAuthRestClientProperties: BasicAuthRestClientProperties = BasicAuthRestClientProperties()
             basicAuthRestClientProperties.username = username
             basicAuthRestClientProperties.password = password
-            basicAuthRestClientProperties.url = "$baseUrl/v1/instance"
+            basicAuthRestClientProperties.url = "$baseUrl/v1/instance/$instanceID"
             basicAuthRestClientProperties.additionalHeaders = mapOfHeaders
 
             this.service = UploadConfigTemplateRestClientService(basicAuthRestClientProperties)
@@ -348,7 +346,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         fun getInstanceDetails(instanceId: String): String {
             log.info("Executing K8sInstanceApi.getInstanceDetails")
             try {
-                val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(HttpMethod.GET.name, "/${instanceId}", "")
+                val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(HttpMethod.GET.name, "/$instanceId", "")
                 print(result)
                 if (result.status >= 200 && result.status < 300) {
                     log.info("K8s instance details retrieved, processing it for configmap details")
@@ -359,7 +357,28 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                     return ""
             } catch (e: Exception) {
                 log.info("Caught exception trying to get k8s instance details")
-                throw BluePrintProcessorException("${e.message}")
+                throw BlueprintProcessorException("${e.message}")
+            }
+        }
+
+        fun createOrUpdateConfig(configJson: K8sConfigPayloadJson, profileName: String) {
+            val objectMapper = ObjectMapper()
+
+            val configJsonString: String = objectMapper.writeValueAsString(configJson)
+
+            log.info("payload generated -> " + configJsonString)
+
+            try {
+                val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(
+                        HttpMethod.POST.name,
+                        "/config", configJsonString
+                )
+                if (result.status < 200 || result.status >= 300) {
+                    throw Exception(result.body)
+                }
+            } catch (e: Exception) {
+                log.info("Caught exception trying to create or update configuration ")
+                throw BlueprintProcessorException("${e.message}")
             }
         }
 
@@ -383,14 +402,10 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                 if (resource.GVK?.Kind == "ConfigMap") {
 
                     return resource.Name
-
                 }
-
             }
             return ""
-
         }
-
     }
 
     inner class K8sConfigTemplateApi(
@@ -425,7 +440,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                 return result.status >= 200 && result.status < 300
             } catch (e: Exception) {
                 log.info("Caught exception trying to get k8s config template  definition")
-                throw BluePrintProcessorException("${e.message}")
+                throw BlueprintProcessorException("${e.message}")
             }
         }
 
@@ -440,26 +455,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                     return false
             } catch (e: Exception) {
                 log.info("Caught exception trying to get k8s config trmplate  definition")
-                throw BluePrintProcessorException("${e.message}")
-            }
-        }
-
-        fun createOrUpdateConfig(configJson: K8sConfigPayloadJson, profileName: String) {
-            val objectMapper = ObjectMapper()
-
-            val configJsonString: String = objectMapper.writeValueAsString(configJson)
-
-            log.info("payload generated -> " + configJsonString)
-
-            try {
-                val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(HttpMethod.POST.name,
-                        "/profile/${profileName}/config", configJsonString)
-                if (result.status < 200 || result.status >= 300) {
-                    throw Exception(result.body)
-                }
-            } catch (e: Exception) {
-                log.info("Caught exception trying to create or update configuration ")
-                throw BluePrintProcessorException("${e.message}")
+                throw BlueprintProcessorException("${e.message}")
             }
         }
 
@@ -480,7 +476,6 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                 }
             } catch (e: Exception) {
                 log.info("Caught exception trying to create k8s config template ${profile.templateName}  - updated")
-//                    throw BluePrintProcessorException("${e.message}")
             }
         }
 
@@ -495,11 +490,9 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                 }
             } catch (e: Exception) {
                 log.info("Caught exception trying to upload k8s config template ${profile.templateName}")
-                throw BluePrintProcessorException("${e.message}")
+                throw BlueprintProcessorException("${e.message}")
             }
         }
-
-
     }
 }
 
@@ -613,7 +606,6 @@ class K8sConfigPayloadJson {
     override fun hashCode(): Int {
         return javaClass.hashCode()
     }
-
 }
 
 class Values {
@@ -636,7 +628,6 @@ class Values {
     override fun hashCode(): Int {
         return javaClass.hashCode()
     }
-
 }
 
 class Topic {
@@ -662,21 +653,15 @@ class Topic {
     override fun hashCode(): Int {
         return javaClass.hashCode()
     }
-
 }
 
 class K8sResources {
-
     var GVK: GVK? = null
     lateinit var Name: String
-
 }
 
 class GVK {
-
     var Group: String? = null
     var Version: String? = null
     var Kind: String? = null
-
 }
-

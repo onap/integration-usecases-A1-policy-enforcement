@@ -73,5 +73,16 @@
     "dictionary-name": "ves-password",
     "dictionary-source": "default",
     "dependencies": []
+  },
+  {
+    "name": "rep-period",
+    "input-param": true,
+    "property": {
+      "type": "string",
+      "default": "60"
+    },
+    "dictionary-name": "rep-period",
+    "dictionary-source": "default",
+    "dependencies": []
   }
 ]
