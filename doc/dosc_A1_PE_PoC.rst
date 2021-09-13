@@ -84,13 +84,10 @@ Postman collection is used also to trigger instantiation using SO APIs.
 
 Following steps are needed to setup Postman:
 
-- Import this Postman collection zip
+- Import this Postman collection (environment file is provided for reference, it's better to create own environment on your own providing variables)
 
-  :download:`A1 PE CNF Postman collection <files/a1pe-postman.zip>`
-
-- Extract the zip and import Postman collection into Postman. Environment file is provided for reference, it's better to create own environment on your own providing variables.
-    - `A1-PE-CNF.postman_collection.json`
-    - `A1-PE-CNF.postman_environment.json`
+  - :download:`A1 PE CNF Postman collection <files/A1-PE-CNF.postman_collection.json>`
+  - :download:`A1 PE CNF Postman collection <files/A1-PE-CNF.postman_environment.json>`
 
 - For use case debugging purposes to get Kubernetes cluster external access to SO CatalogDB (GET operations only), modify SO CatalogDB service to NodePort instead of ClusterIP. You may also create separate own NodePort if you wish, but here we have just edited directly the service with kubectl.
 
@@ -190,8 +187,8 @@ The separated collection was prepared to trigger and check the A1 Close-loop.
 
 Like before, following steps are needed to setup Postman:
 
-- Extract the **a1pe-postman.zip** and import Postman collection into Postman. Environment **A1-PE_CNF.postman_environment.json** file is provided for reference, it's better to create own environment on your own providing variables.
-    - `A1-PE-CLOSED-LOOP.postman_collection.json`
+- Import Postman collection into Postman. Environment **A1-PE_CNF.postman_environment.json** file is provided for reference, it's better to create own environment on your own providing variables.
+    - :download:`A1-PE-CLOSED-LOOP.postman_collection.json`
 
 
 CNF post-instantiation steps

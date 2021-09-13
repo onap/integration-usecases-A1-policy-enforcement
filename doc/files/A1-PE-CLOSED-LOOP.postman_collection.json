@@ -1,0 +1,290 @@
+{
+	"info": {
+		"_postman_id": "ded22a5c-1977-42bf-941d-8952354f20f6",
+		"name": "A1-PE-CLOSED-LOOP",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "[TEST] Get cells",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{k8s}}:32766/v1/ran/cells/",
+					"protocol": "http",
+					"host": [
+						"{{k8s}}"
+					],
+					"port": "32766",
+					"path": [
+						"v1",
+						"ran",
+						"cells",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[STEP 1] Configure the policy type",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"samsung_policy_type\",\r\n  \"description\": \"samsung policy type; standard model of a policy with unconstrained scope id combinations\",\r\n  \"policy_type_id\": 1000,\r\n  \"create_schema\": {\r\n    \"$schema\": \"http://json-schema.org/draft-07/schema#\",\r\n    \"title\": \"Samsung_demo\",\r\n    \"description\": \"Samsung demo policy type\",\r\n    \"type\": \"object\",\r\n    \"properties\": {\r\n      \"scope\": {\r\n        \"type\": \"object\",\r\n        \"properties\": {\r\n          \"ueId\": {\r\n            \"type\": \"string\"\r\n          },\r\n          \"groupId\": {\r\n            \"type\": \"string\"\r\n          }\r\n        },\r\n        \"additionalProperties\": false,\r\n        \"required\": [\r\n          \"ueId\"\r\n        ]\r\n      },\r\n      \"resources\": {\r\n        \"type\": \"array\",\r\n        \"items\": {\r\n          \"type\": \"object\",\r\n          \"properties\": {\r\n            \"cellIdList\": {\r\n              \"type\": \"array\",\r\n              \"minItems\": 1,\r\n              \"uniqueItems\": true,\r\n              \"items\": {\r\n                \"type\": \"string\"\r\n              }\r\n            },\r\n            \"preference\": {\r\n              \"type\": \"string\",\r\n              \"enum\": [\r\n                \"SHALL\",\r\n                \"PREFER\",\r\n                \"AVOID\",\r\n                \"FORBID\"\r\n              ]\r\n            }\r\n          },\r\n          \"additionalProperties\": false,\r\n          \"required\": [\r\n            \"cellIdList\",\r\n            \"preference\"\r\n          ]\r\n        }\r\n      }\r\n    },\r\n    \"additionalProperties\": false,\r\n    \"required\": [\r\n      \"scope\",\r\n      \"resources\"\r\n    ]\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://{{k8s}}:32766/v1/a1-p/policytypes/1000",
+					"protocol": "http",
+					"host": [
+						"{{k8s}}"
+					],
+					"port": "32766",
+					"path": [
+						"v1",
+						"a1-p",
+						"policytypes",
+						"1000"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[TEST] Get policy types",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{k8s}}:32766/v1/a1-p/policytypes/1000/",
+					"protocol": "http",
+					"host": [
+						"{{k8s}}"
+					],
+					"port": "32766",
+					"path": [
+						"v1",
+						"a1-p",
+						"policytypes",
+						"1000",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[TEST] RIC healthcheck",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{k8s}}:32766/v1/a1-p/healthcheck",
+					"protocol": "http",
+					"host": [
+						"{{k8s}}"
+					],
+					"port": "32766",
+					"path": [
+						"v1",
+						"a1-p",
+						"healthcheck"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[STEP 2] Cell - start reporting",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://{{k8s}}:32766/v1/ran/cells/{{cellId}}/start?reportingMethod={{reportingMethod}}",
+					"protocol": "http",
+					"host": [
+						"{{k8s}}"
+					],
+					"port": "32766",
+					"path": [
+						"v1",
+						"ran",
+						"cells",
+						"{{cellId}}",
+						"start"
+					],
+					"query": [
+						{
+							"key": "reportingMethod",
+							"value": "{{reportingMethod}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[TEST] Get event from datacollector",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{k8s}}:30980/v1/pm/events/aggregatedmetrics/?slot=10&count=5&startTime=2021-06-22T16:35:00%2B01:00",
+					"protocol": "http",
+					"host": [
+						"{{k8s}}"
+					],
+					"port": "30980",
+					"path": [
+						"v1",
+						"pm",
+						"events",
+						"aggregatedmetrics",
+						""
+					],
+					"query": [
+						{
+							"key": "slot",
+							"value": "10"
+						},
+						{
+							"key": "count",
+							"value": "5"
+						},
+						{
+							"key": "startTime",
+							"value": "2021-06-22T16:35:00%2B01:00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[TEST] Get user equipments from datacollector",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{k8s}}:30980/v1/pm/events/aggregatedmetrics/?slot=10&count=5&startTime=2021-06-22T16:35:00%2B01:00",
+					"protocol": "http",
+					"host": [
+						"{{k8s}}"
+					],
+					"port": "30980",
+					"path": [
+						"v1",
+						"pm",
+						"events",
+						"aggregatedmetrics",
+						""
+					],
+					"query": [
+						{
+							"key": "slot",
+							"value": "10"
+						},
+						{
+							"key": "count",
+							"value": "5"
+						},
+						{
+							"key": "startTime",
+							"value": "2021-06-22T16:35:00%2B01:00"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[STEP 3] Cell - start sending fault values",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://{{k8s}}:32766/v1/ran/cells/{{cellId}}/startFailure?reportingMethod={{reportingMethod}}",
+					"protocol": "http",
+					"host": [
+						"{{k8s}}"
+					],
+					"port": "32766",
+					"path": [
+						"v1",
+						"ran",
+						"cells",
+						"{{cellId}}",
+						"startFailure"
+					],
+					"query": [
+						{
+							"key": "reportingMethod",
+							"value": "{{reportingMethod}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[TEST] Get policy instances",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://{{k8s}}:32766/v1/a1-p/policytypes/1000/policies",
+					"protocol": "http",
+					"host": [
+						"{{k8s}}"
+					],
+					"port": "32766",
+					"path": [
+						"v1",
+						"a1-p",
+						"policytypes",
+						"1000",
+						"policies"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "[STEP 4] Cell - stop reporting",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://{{k8s}}:32766/v1/ran/cells/{{cellId}}/stopFailure?reportingMethod={{reportingMethod}}",
+					"protocol": "http",
+					"host": [
+						"{{k8s}}"
+					],
+					"port": "32766",
+					"path": [
+						"v1",
+						"ran",
+						"cells",
+						"{{cellId}}",
+						"stopFailure"
+					],
+					"query": [
+						{
+							"key": "reportingMethod",
+							"value": "{{reportingMethod}}"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
