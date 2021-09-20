@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "929062b5_009645ec",
+        "filename": "doc/files/A1-PE-CLOSED-LOOP.postman_collection.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-09-20T11:49:04Z",
+      "side": 1,
+      "message": "Is that endpoint correct? Shouldn\u0027t it be http://{{k8s}}:30980/v1/pm/ues ?",
+      "revId": "780460cecb0596ce62346ab25aadfe09943cb217",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
