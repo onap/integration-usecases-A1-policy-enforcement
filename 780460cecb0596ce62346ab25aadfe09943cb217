@@ -16,6 +16,24 @@
       "revId": "780460cecb0596ce62346ab25aadfe09943cb217",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2bb7f87a_28ec97b6",
+        "filename": "doc/files/A1-PE-CLOSED-LOOP.postman_collection.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 5335
+      },
+      "writtenOn": "2021-09-23T10:40:00Z",
+      "side": 1,
+      "message": "Yes is okey, this endpoint is only use by the SleepingCellDetector.",
+      "parentUuid": "929062b5_009645ec",
+      "revId": "780460cecb0596ce62346ab25aadfe09943cb217",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
