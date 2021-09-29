@@ -18,6 +18,9 @@ a1pesimulator:
         repository: nexus3.onap.org:10001/onap/integration/simulators/a1-pe-simulator
         tag: latest
         pullPolicy: Always
+      env:
+        - name: XML_PM_BULK_VENDORNAME
+          value: Samsung Electronic
       volumeMounts:
         - name: config
           mountPath: /a1-pe-simulator/config

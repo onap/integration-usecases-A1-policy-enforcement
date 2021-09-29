@@ -19,9 +19,13 @@ package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
-import java.io.File
-import java.nio.file.Path
-import java.nio.file.Paths
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import org.apache.commons.compress.archivers.ArchiveEntry
+import org.apache.commons.compress.archivers.ArchiveInputStream
+import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
+import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
+import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.apache.http.client.ClientProtocolException
 import org.apache.http.client.entity.EntityBuilder
@@ -29,6 +33,7 @@ import org.apache.http.client.methods.HttpPost
 import org.apache.http.client.methods.HttpUriRequest
 import org.apache.http.message.BasicHeader
 import org.onap.ccsdk.cds.blueprintsprocessor.core.api.data.ExecutionServiceInput
+import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.storedContentFromResolvedArtifactNB
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.BasicAuthRestClientProperties
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BasicAuthRestClientService
 import org.onap.ccsdk.cds.blueprintsprocessor.rest.service.BlueprintWebClientService
@@ -43,13 +48,13 @@ import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
 import org.yaml.snakeyaml.Yaml
-import java.io.IOException
-import java.util.Base64
+import java.io.*
 import java.nio.charset.Charset
 import java.nio.file.Files
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import org.onap.ccsdk.cds.blueprintsprocessor.functions.resource.resolution.storedContentFromResolvedArtifactNB
+import java.nio.file.Path
+import java.nio.file.Paths
+import java.util.*
+
 
 open class DayOneConfig : AbstractScriptComponentFunction() {
 
@@ -171,6 +176,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
             log.info("DAY-1 Script excution completed")
         } catch (e: Exception) {
             log.info("Caught exception trying to get the vnf Details!!")
+            log.info("${e}")
         }
     }
 
@@ -221,6 +227,48 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         bluePrintRuntimeService.getBlueprintError().addError("${runtimeException.message}", "recoverNB")
     }
 
+    /**
+     * Temporary Samsung's implementation of BlueprintArchiveUtils.deCompress function because of the problem
+     * with empty entry!!.name in tar archive, which creates file instead of directory and failed
+     * the process with an exception: java.io.FileNotFoundException: (Not a directory)
+     */
+    fun deCompress(archiveFile: File, targetPath: String): File {
+        var enumeration: BlueprintArchiveUtils.ArchiveEnumerator? = null
+
+        var tarGzArchiveIs: InputStream = BufferedInputStream(archiveFile.inputStream())
+        tarGzArchiveIs = GzipCompressorInputStream(tarGzArchiveIs)
+        val tarGzArchive: ArchiveInputStream = TarArchiveInputStream(tarGzArchiveIs)
+        enumeration = BlueprintArchiveUtils.ArchiveEnumerator(tarGzArchive)
+
+        enumeration.use {
+            while (enumeration!!.hasMoreElements()) {
+                val entry: ArchiveEntry? = enumeration.nextElement()
+                if (entry?.getName() != null && !entry?.getName().isBlank()) {
+                    val destFilePath = File(targetPath, entry!!.name)
+                    destFilePath.parentFile.mkdirs()
+
+                    if (entry!!.isDirectory)
+                        continue
+
+                    val bufferedIs = BufferedInputStream(enumeration.getInputStream(entry))
+                    destFilePath.outputStream().buffered(1024).use { bos ->
+                        bufferedIs.copyTo(bos)
+                    }
+
+                    if (!enumeration.getHasSharedEntryInputStream())
+                        bufferedIs.close()
+                }
+            }
+        }
+
+        val destinationDir = File(targetPath)
+        check(destinationDir.isDirectory && destinationDir.exists()) {
+            throw BlueprintProcessorException("failed to decompress blueprint(${archiveFile.absolutePath}) to ($targetPath) ")
+        }
+
+        return File(targetPath)
+    }
+
     fun modifyTemplate(configmapName: String, typOfVfmodule: String): String {
 
         log.info("Executing modifyTemplate ->")
@@ -238,12 +286,11 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         if (!templateFile.exists())
             throw BlueprintProcessorException("K8s Profile template file $templateFilePath does not exists")
 
-        log.info("Decompressing config template to $destPath")
+        val isDeleted = FileUtils.deleteQuietly(File(destPath))
+        log.info("Purging ${destPath} before decompression: $isDeleted")
 
-        val decompressedProfile: File = BlueprintArchiveUtils.deCompress(
-                templateFilePath.toFile(),
-                "$destPath", ArchiveType.TarGz
-        )
+        log.info("Decompressing config template to $destPath")
+        val decompressedProfile: File = deCompress(templateFilePath.toFile(), "$destPath")
 
         log.info("$templateFilePath decompression completed")
 
@@ -289,10 +336,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         val tempConfigTemplatePath: File = createTempDir("conftemplate-", "", tempMainPath)
         log.info("Decompressing profile to $tempConfigTemplatePath")
 
-        val decompressedProfile2: File = BlueprintArchiveUtils.deCompress(
-                templateFilePath.toFile(),
-                "$tempConfigTemplatePath", ArchiveType.TarGz
-        )
+        val decompressedProfile2: File = deCompress(templateFilePath.toFile(),"$tempConfigTemplatePath")
 
         log.info("$templateFilePath decompression completed")
 
