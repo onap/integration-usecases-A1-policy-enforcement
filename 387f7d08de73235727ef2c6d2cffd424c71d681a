@@ -16,6 +16,24 @@
       "revId": "387f7d08de73235727ef2c6d2cffd424c71d681a",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2529a600_11a84c2f",
+        "filename": "operations/a1-pe-sim-packages/resources/oran-sim-cba/Scripts/kotlin/DayOneConfig.kt",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 7825
+      },
+      "writtenOn": "2021-10-01T07:04:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fb0879c_60f8d5af",
+      "revId": "387f7d08de73235727ef2c6d2cffd424c71d681a",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
