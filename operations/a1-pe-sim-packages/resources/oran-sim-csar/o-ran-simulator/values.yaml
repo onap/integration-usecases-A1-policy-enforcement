@@ -18,6 +18,75 @@ a1pesimulator:
         repository: nexus3.onap.org:10001/onap/integration/simulators/a1-pe-simulator
         tag: latest
         pullPolicy: Always
+      env:
+        - name: VNF_CONFIG_FILE
+          value: /a1-pe-simulator/config/vnf.config
+        - name: VES_COLLECTOR_PROTOCOL
+          value: https
+        - name: VES_COLLECTOR_ENDPOINT
+          value: /eventListener/v7
+        - name: VES_PM_MAXPOOLSIZE
+          value: 10
+        - name: VES_DEFAULTINTERVAL
+          value: 10
+        - name: VES_DEFAULTREPORTINGMETHOD
+          value: FILE_READY
+        - name: VES_FAILING_THROUGHPUT
+          value: 1
+        - name: VES_FAILING_LATENCY
+          value: 500
+        - name: VES_FAILING_CHECKOUT_DELAY
+          value: 15
+        #Topology constants
+        - name: TOPOLOGY_CELL_RANGE
+          value: 5
+        - name: TOPOLOGY_CELL_CONFIG_FILE
+          value: /a1-pe-simulator/config/cells.json
+        - name: TOPOLOGY_UE_CONFIG_FILE
+          value: /a1-pe-simulator/config/ue.json
+        #FTP server constants
+        - name: FTP_SERVER_UPLOAD
+          value: false
+        - name: FTP_SERVER_PROTOCOL
+          value: sftp
+        - name: FTP_SERVER_FILEPATH
+          value: upload
+        - name: FTP_SERVER_USERNAME
+          value: admin
+        - name: FTP_SERVER_PASSWORD
+          value: samsung
+        # PM Bulk File constants
+        - name: XML_PM_LOCATION
+          value: /a1-pe-simulator/generated_pm_bulks
+        - name: XML_PM_BULK_FILEFORMATVERSION
+          value: 32.435 V7.0
+        - name: XML_PM_BULK_VENDORNAME
+          value: Samsung
+        - name: XML_PM_BULK_USERLABEL
+          value: ORAN PE Sim
+        - name: XML_PM_BULK_FILESENDER
+          value: ORAN
+        - name: XML_PM_BULK_DOMAINID
+          value: DomainId
+        #File Ready Event constants
+        - name: FILE_READY_VERSION
+          value: 4.0.1
+        - name: FILE_READY_VESEVENTLISTENERVERSION
+          value: 7.0.1
+        - name: FILE_READY_DOMAIN
+          value: notification
+        - name: FILE_READY_EVENTNAME
+          value: stndDefined-PE-Samsung-Notification
+        - name: FILE_READY_FILEFORMATTYPE
+          value: org.3GPP.32.435#measCollec
+        - name: FILE_READY_FILEFORMATVERSION
+          value: V10
+        - name: FILE_READY_NOTIFICATIONFIELDSVERSION
+          value: 2.0
+        - name: FILE_READY_PRIORITY
+          value: Normal
+        - name: FILE_READY_REPORTINGENTITYNAME
+          value: otenb5309
       volumeMounts:
         - name: config
           mountPath: /a1-pe-simulator/config

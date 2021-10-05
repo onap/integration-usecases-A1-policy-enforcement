@@ -21,7 +21,7 @@
     {{- range $containerSpec.env }}
     {{/* This is ugly but helm's tpl required root object */}}
     - name: {{ .name }}
-      value: {{ tpl .value $dot.dot | quote }}
+      value: {{ .value | quote }}
     {{- end }}
   {{- end }}
   {{- with $containerSpec.command }}
