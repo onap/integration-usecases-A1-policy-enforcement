@@ -82,7 +82,7 @@ a1pesimulator:
         - name: FILE_READY_FILEFORMATVERSION
           value: V10
         - name: FILE_READY_NOTIFICATIONFIELDSVERSION
-          value: 2.0
+          value: "2.0"
         - name: FILE_READY_PRIORITY
           value: Normal
         - name: FILE_READY_REPORTINGENTITYNAME
