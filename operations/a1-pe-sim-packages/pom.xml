@@ -18,8 +18,30 @@
         <version>3.2.0</version>
     </parent>
 
+    <modules>
+        <module>resources/day-one-config</module>
+    </modules>
+
     <build>
         <plugins>
+            <plugin>
+                <groupId>com.coderplus.maven.plugins</groupId>
+                <artifactId>copy-rename-maven-plugin</artifactId>
+                <version>1.0</version>
+                <executions>
+                    <execution>
+                        <id>day-one-config-copy</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>copy</goal>
+                        </goals>
+                        <configuration>
+                            <sourceFile>resources/day-one-config/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/scripts/DayOneConfig.kt</sourceFile>
+                            <destinationFile>resources/oran-sim-cba/Scripts/kotlin/DayOneConfig.kt</destinationFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -31,7 +53,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <finalName>oran-sim-cba</finalName>
+                            <finalName>cba_o-ran-simulator</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
                                 <descriptor>cba-resource.xml</descriptor>
