@@ -25,7 +25,6 @@ import org.apache.commons.compress.archivers.ArchiveEntry
 import org.apache.commons.compress.archivers.ArchiveInputStream
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
-import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.apache.http.client.ClientProtocolException
 import org.apache.http.client.entity.EntityBuilder
@@ -347,9 +346,9 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         File(manifestFileName2).copyTo(File(destOverrideFile), true)
 
         if (!BluePrintArchiveUtils.compress(
-                        decompressedProfile2, templateFilePath.toFile(),
-                        ArchiveType.TarGz
-                )
+                decompressedProfile2, templateFilePath.toFile(),
+                ArchiveType.TarGz
+            )
         ) {
             throw BluePrintProcessorException("Profile compression has failed")
         }
@@ -360,12 +359,12 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
     }
 
     inner class K8sInstanceApi(
-            val username: String,
-            val password: String,
-            val baseUrl: String,
-            val definition: String,
-            val definitionVersion: String,
-            val instanceID: String
+        val username: String,
+        val password: String,
+        val baseUrl: String,
+        val definition: String,
+        val definitionVersion: String,
+        val instanceID: String
     ) {
         private val service: UploadConfigTemplateRestClientService // BasicAuthRestClientService
 
@@ -411,8 +410,8 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 
             try {
                 val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(
-                        HttpMethod.POST.name,
-                        "/config", configJsonString
+                    HttpMethod.POST.name,
+                    "/config", configJsonString
                 )
                 if (result.status < 200 || result.status >= 300) {
                     throw Exception(result.body)
@@ -450,12 +449,12 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
     }
 
     inner class K8sConfigTemplateApi(
-            val username: String,
-            val password: String,
-            val baseUrl: String,
-            val definition: String,
-            val definitionVersion: String,
-            val configTemplateName: String
+        val username: String,
+        val password: String,
+        val baseUrl: String,
+        val definition: String,
+        val definitionVersion: String,
+        val configTemplateName: String
     ) {
         private val service: UploadConfigTemplateRestClientService // BasicAuthRestClientService
 
@@ -505,9 +504,9 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
             val profileJsonString: String = objectMapper.writeValueAsString(profile)
             try {
                 val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(
-                        HttpMethod.POST.name,
-                        "/config-template",
-                        profileJsonString
+                    HttpMethod.POST.name,
+                    "/config-template",
+                    profileJsonString
                 )
 
                 if (result.status >= 200 && result.status < 300) {
@@ -523,8 +522,8 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         fun uploadConfigTemplateContent(profile: K8sConfigTemplate, filePath: Path) {
             try {
                 val result: BlueprintWebClientService.WebClientResponse<String> = service.uploadBinaryFile(
-                        "/config-template/${profile.templateName}/content",
-                        filePath
+                    "/config-template/${profile.templateName}/content",
+                    filePath
                 )
                 if (result.status < 200 || result.status >= 300) {
                     throw Exception(result.body)
@@ -538,19 +537,19 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 }
 
 class UploadConfigTemplateRestClientService(
-        private val restClientProperties: BasicAuthRestClientProperties
+    private val restClientProperties: BasicAuthRestClientProperties
 ) : BlueprintWebClientService {
 
     override fun defaultHeaders(): Map<String, String> {
 
         val encodedCredentials = setBasicAuth(
-                restClientProperties.username,
-                restClientProperties.password
+            restClientProperties.username,
+            restClientProperties.password
         )
         return mapOf(
-                HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
-                HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
-                HttpHeaders.AUTHORIZATION to "Basic $encodedCredentials"
+            HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
+            HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
+            HttpHeaders.AUTHORIZATION to "Basic $encodedCredentials"
         )
     }
 
@@ -566,11 +565,11 @@ class UploadConfigTemplateRestClientService(
 
         if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
             val encodedCredentials = setBasicAuth(
-                    restClientProperties.username,
-                    restClientProperties.password
+                restClientProperties.username,
+                restClientProperties.password
             )
             customHeaders[HttpHeaders.AUTHORIZATION] =
-                    "Basic $encodedCredentials"
+                "Basic $encodedCredentials"
         }
         return super.convertToBasicHeaders(customHeaders)
     }
@@ -578,7 +577,7 @@ class UploadConfigTemplateRestClientService(
     private fun setBasicAuth(username: String, password: String): String {
         val credentialsString = "$username:$password"
         return Base64.getEncoder().encodeToString(
-                credentialsString.toByteArray(Charset.defaultCharset())
+            credentialsString.toByteArray(Charset.defaultCharset())
         )
     }
 

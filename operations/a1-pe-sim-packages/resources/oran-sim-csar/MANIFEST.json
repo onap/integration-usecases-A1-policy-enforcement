@@ -3,7 +3,7 @@
   "description": "A1 PE Simulator; Samsung Electronics.",
   "data": [
     {
-      "file": "oran-sim-cba.zip",
+      "file": "cba_o-ran-simulator.zip",
       "type": "CONTROLLER_BLUEPRINT_ARCHIVE"
     },
     {
