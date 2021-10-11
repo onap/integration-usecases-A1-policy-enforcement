@@ -36,7 +36,7 @@
       <destName>helm_simulator.tgz</destName>
     </file>
     <file>
-      <source>target/oran-sim-cba.zip</source>
+      <source>target/cba_o-ran-simulator.zip</source>
       <outputDirectory>/</outputDirectory>
     </file>
   </files>

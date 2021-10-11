@@ -1,20 +1,17 @@
 package org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts
 
 /*
-* Copyright © 2019 TechMahindra
-* Author: Malinconico Aniello Paolo, Vamshi Namilikonda, Thamlur Raju
-* Licensed under the Apache License, Version 2.0 (the "License");
-* you may not use this file except in compliance with the License.
-* You may obtain a copy of the License at
-*
-*     http://www.apache.org/licenses/LICENSE-2.0
-*
-* Unless required by applicable law or agreed to in writing, software
-* distributed under the License is distributed on an "AS IS" BASIS,
-* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-* See the License for the specific language governing permissions and
-* limitations under the License.
-*/
+ * Copyright (C) 2021 Samsung Electronics
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License
+ */
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -56,16 +53,16 @@ import java.nio.file.Paths
 import java.util.*
 
 
-open class DayOneConfig : AbstractScriptComponentFunction() {
+open class DayTwoConfig : AbstractScriptComponentFunction() {
 
-    private val log = LoggerFactory.getLogger(DayOneConfig::class.java)!!
+    private val log = LoggerFactory.getLogger(DayTwoConfig::class.java)!!
 
     override fun getName(): String {
-        return "DayOneConfig"
+        return "DayTwoConfig"
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
-        log.info("DAY-1 Script execution Started")
+        log.info("DAY-2 Script execution Started")
 
         val baseK8sApiUrl = getDynamicProperties("api-access").get("url").asText()
         val k8sApiUsername = getDynamicProperties("api-access").get("username").asText()
@@ -104,7 +101,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 
             for (item in aaiPayloadObject.get("vf-module")) {
 
-                log.info("item payload Deatils : $item")
+                log.info("Item payload: $item")
 
                 val vfModuleID: String = item.get("vf-module-id").asText()
                 log.info("AAI Vf-module ID is : $vfModuleID")
@@ -170,7 +167,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                     instanceApi.createOrUpdateConfig(config, k8sRbProfileName)
                 }
             }
-            log.info("DAY-1 Script excution completed")
+            log.info("DAY-2 Script execution completed")
         } catch (e: Exception) {
             log.info("Caught exception trying to get the vnf Details!!")
             log.warn("Error details: ", e)
