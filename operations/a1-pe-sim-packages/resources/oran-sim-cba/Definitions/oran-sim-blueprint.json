@@ -283,7 +283,7 @@
               "process": {
                 "inputs": {
                   "script-type": "kotlin",
-                  "script-class-reference": "org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.DayOneConfig",
+                  "script-class-reference": "org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.DayTwoConfig",
                   "dynamic-properties": "*config-deploy-properties"
                 }
               }
