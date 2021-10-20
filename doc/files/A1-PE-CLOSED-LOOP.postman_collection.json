@@ -6,6 +6,460 @@
   },
   "item": [
     {
+      "name": "[CONFIGURE-STEP 0] Register A1 PE SIM as a Near-RT RIC",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"config\": {\r\n        \"controller\": [\r\n            {\r\n                \"name\": \"controller1\",\r\n                \"baseUrl\": \"https://sdnc.onap:8443\",\r\n                \"userName\": \"admin\",\r\n                \"password\": \"Kp8bJ4SXszM0WXlhak3eHlcse2gAw84vaoGGmJvUy2U\"\r\n            }\r\n        ],\r\n        \"ric\": [\r\n            {\r\n                \"name\": \"ric1\",\r\n                \"baseUrl\": \"http://{{k8s}}:32766/v1\",\r\n                \"controller\": \"controller1\",\r\n                \"managedElementIds\": []\r\n            }\r\n        ],\r\n        \"streams_publishes\": {\r\n            \"dmaap_publisher\": {\r\n                \"type\": \"message_router\",\r\n                \"dmaap_info\": {\r\n                    \"topic_url\": \"http://message-router:3904/events/A1-POLICY-AGENT-WRITE\"\r\n                }\r\n            }\r\n        },\r\n        \"streams_subscribes\": {\r\n            \"dmaap_subscriber\": {\r\n                \"type\": \"message_router\",\r\n                \"dmaap_info\": {\r\n                    \"topic_url\": \"http://message-router:3904/events/A1-POLICY-AGENT-READ/users/policy-agent?timeout=15000&limit=100\"\r\n                }\r\n            }\r\n        }\r\n    }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{k8s}}:30294/a1-policy/v2/configuration",
+          "protocol": "https",
+          "host": [
+            "{{k8s}}"
+          ],
+          "port": "30294",
+          "path": [
+            "a1-policy",
+            "v2",
+            "configuration"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[TEST] Check if A1 PE SIM register in ONAP-PMS",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "a1_pe_sim__ric_name = \"ric1\"\r",
+              "a1_pe_sim__node_port = \"32766\"\r",
+              "\r",
+              "register_rics = pm.response.json()[\"config\"][\"ric\"]\r",
+              "\r",
+              "pm.test(\"Check if A1 PE SIM register in ONAP-PMS\", function () {\r",
+              "    for (ric of register_rics) {\r",
+              "        pm.expect(ric.name).not.to.be.null;\r",
+              "        pm.expect(ric.controller).not.to.be.null;\r",
+              "\r",
+              "        if (ric[\"name\"] === a1_pe_sim__ric_name) {\r",
+              "            if (ric[\"baseUrl\"].includes(`:${a1_pe_sim__node_port}/v1`)) {\r",
+              "                pm.expect(true).to.eql(true);\r",
+              "                return;\r",
+              "            }\r",
+              "\r",
+              "            pm.expect(true).to.eql(false);\r",
+              "        }\r",
+              "    }\r",
+              "    \r",
+              "    pm.expect(true).to.eql(false)\r",
+              "});"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://{{k8s}}:30294/a1-policy/v2/configuration",
+          "protocol": "https",
+          "host": [
+            "{{k8s}}"
+          ],
+          "port": "30294",
+          "path": [
+            "a1-policy",
+            "v2",
+            "configuration"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[TEST] Check CONSUL PM Mapper  key entry",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "consul_pm_mapper_key__constants_str = \"dcae-pm-mapper:dmaap\"\r",
+              "\r",
+              "pm.test(\"Check CONSUL PM Mapper  key entry (PM Mapper is deploy?)\", function () {\r",
+              "    exist = false\r",
+              "    pm.response.json().forEach((key) => {\r",
+              "        if (key === consul_pm_mapper_key__constants_str) {\r",
+              "                exist = true\r",
+              "                return\r",
+              "            }\r",
+              "        }\r",
+              "    )\r",
+              "    \r",
+              "    pm.expect(exist).to.eql(true)\r",
+              "})"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://{{k8s}}:32749/v1/kv/?keys",
+          "protocol": "http",
+          "host": [
+            "{{k8s}}"
+          ],
+          "port": "32749",
+          "path": [
+            "v1",
+            "kv",
+            ""
+          ],
+          "query": [
+            {
+              "key": "keys",
+              "value": null
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CONFIGURE-STEP 1] Check datafile CONSUL key value",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "consul_datafile_dmaap_key__constants_str = \"datafile-collector:dmaap\"\r",
+              "\r",
+              "pm.response.json().forEach((key) => {\r",
+              "    if (key.includes(consul_datafile_dmaap_key__constants_str)) {\r",
+              "            pm.environment.set(\"consul-datafile-dmaap-key\", key);\r",
+              "        }\r",
+              "    }\r",
+              ")"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://{{k8s}}:32749/v1/kv/?keys",
+          "protocol": "http",
+          "host": [
+            "{{k8s}}"
+          ],
+          "port": "32749",
+          "path": [
+            "v1",
+            "kv",
+            ""
+          ],
+          "query": [
+            {
+              "key": "keys",
+              "value": null
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CONFIGURE-STEP 2] Update feed DATAFILE-COLLECTOR configuration",
+      "request": {
+        "method": "PUT",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n   \"feed0\":{\r\n      \"publisher_id\":\"4.307w\",\r\n      \"location\":\"loc00\",\r\n      \"publish_url\":\"https://dmaap-dr-prov/publish/1\",\r\n      \"log_url\":\"https://dmaap-dr-prov/feedlog/1\",\r\n      \"username\":\"dcaecm\",\r\n      \"password\":\"dcaecm\"\r\n   }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{k8s}}:32749/v1/kv/{{consul-datafile-dmaap-key}}",
+          "protocol": "http",
+          "host": [
+            "{{k8s}}"
+          ],
+          "port": "32749",
+          "path": [
+            "v1",
+            "kv",
+            "{{consul-datafile-dmaap-key}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CONFIGURE-STEP 3] Updated publisher's DMaaP feed",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "X-DMAAP-DR-ON-BEHALF-OF",
+            "value": "dcaecm",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/vnd.dmaap-dr.feed",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n   \"name\": \"bulk_pm_feed\",\r\n   \"groupid\":0,\r\n   \"description\":\"Updated config\",\r\n   \"authorization\":{\r\n      \"endpoint_addrs\":[\r\n      ],\r\n      \"classification\":\"unclassified\",\r\n      \"endpoint_ids\":[\r\n         {\r\n            \"password\":\"dcaecm\",\r\n            \"id\":\"dcaecm\"\r\n         }\r\n      ]\r\n   }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{k8s}}:30269/feed/1",
+          "protocol": "https",
+          "host": [
+            "{{k8s}}"
+          ],
+          "port": "30269",
+          "path": [
+            "feed",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CONFIGURE-STEP 4] Subscribe PM Mapper to DMaaP feed",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\r",
+              "self = pm.response.json()[\"links\"][\"self\"].split('/')\r",
+              "pm.environment.set(\"feed_subscription_id\", self[self.length - 1])"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-DMAAP-DR-ON-BEHALF-OF",
+            "value": "dcaecm",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/vnd.dmaap-dr.subscription",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n   \"delivery\":{\r\n      \"url\":\"https://dcae-pm-mapper:8443/delivery\",\r\n      \"user\":\"dcae@dcae.onap.org\",\r\n      \"password\":\"demo123456!\",\r\n      \"use100\":true\r\n   },\r\n   \"metadataOnly\":false,\r\n   \"suspend\":false,\r\n   \"groupid\":29,\r\n   \"subscriber\":\"dradmin\",\r\n   \"decompress\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://{{k8s}}:30269/subscribe/1",
+          "protocol": "https",
+          "host": [
+            "{{k8s}}"
+          ],
+          "port": "30269",
+          "path": [
+            "subscribe",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CONFIGURE-STEP 5] Update feed PM Mapper configuration",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "X-DMAAP-DR-ON-BEHALF-OF",
+            "value": "dcaecm",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/vnd.dmaap-dr.subscription",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n   \"pm-feed\":{\r\n      \"subscriber_id\":\"{{feed_subscription_id}}\",\r\n      \"location\":\"san-francisco\",\r\n      \"delivery_url\":\"https://dcae-pm-mapper:8443/delivery\",\r\n      \"username\":\"dcae@dcae.onap.org\",\r\n      \"password\":\"demo123456!\",\r\n      \"decompress\":true,\r\n      \"privilegedSubscriber\":true\r\n   },\r\n   \"pm-topic\":{\r\n      \"topic_url\":\"http://message-router:3904/events/org.onap.dmaap.mr.PERFORMANCE_MEASUREMENTS\",\r\n      \"client_id\":\"1635166161294\",\r\n      \"location\":\"san-francisco\",\r\n      \"client_role\":\"org.onap.dcae.pmPublisher\"\r\n   }\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{k8s}}:32749/v1/kv/dcae-pm-mapper:dmaap",
+          "protocol": "http",
+          "host": [
+            "{{k8s}}"
+          ],
+          "port": "32749",
+          "path": [
+            "v1",
+            "kv",
+            "dcae-pm-mapper:dmaap"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[TEST] Check PM Mapper CONSUL configuration",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm_mapper_consul = JSON.parse(atob(pm.response.json()[0][\"Value\"]));\r",
+              "\r",
+              "pm.test(\"Check PM Mapper CONSUL configuration\", function () {\r",
+              "    feed_subscription_id__set = pm.environment.get(\"feed_subscription_id\")\r",
+              "    feed_subscription_id__consul = pm_mapper_consul[\"pm-feed\"][\"subscriber_id\"]\r",
+              "    pm.expect(feed_subscription_id__consul).to.eql(feed_subscription_id__set)\r",
+              "})"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true,
+        "disabledSystemHeaders": {
+          "content-type": true
+        }
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-DMAAP-DR-ON-BEHALF-OF",
+            "value": "dcaecm",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/vnd.dmaap-dr.subscription",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://{{k8s}}:32749/v1/kv/dcae-pm-mapper:dmaap",
+          "protocol": "http",
+          "host": [
+            "{{k8s}}"
+          ],
+          "port": "32749",
+          "path": [
+            "v1",
+            "kv",
+            "dcae-pm-mapper:dmaap"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "[CLEANUP] Delete topic - fix redeployment datafile collector issue",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://{{k8s}}:30242/webapi/topics/org.onap.dmaap.mr.PERFORMANCE_MEASUREMENTS",
+          "protocol": "https",
+          "host": [
+            "{{k8s}}"
+          ],
+          "port": "30242",
+          "path": [
+            "webapi",
+            "topics",
+            "org.onap.dmaap.mr.PERFORMANCE_MEASUREMENTS"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "[TEST] Get cells",
       "request": {
         "method": "GET",
@@ -174,7 +628,7 @@
         "method": "GET",
         "header": [],
         "url": {
-          "raw": "http://{{k8s}}:30980/v1/pm/events/aggregatedmetrics/?slot=10&count=5&startTime=2021-06-22T16:35:00%2B01:00",
+          "raw": "http://{{k8s}}:30980/v1/pm/ues",
           "protocol": "http",
           "host": [
             "{{k8s}}"
@@ -183,23 +637,7 @@
           "path": [
             "v1",
             "pm",
-            "events",
-            "aggregatedmetrics",
-            ""
-          ],
-          "query": [
-            {
-              "key": "slot",
-              "value": "10"
-            },
-            {
-              "key": "count",
-              "value": "5"
-            },
-            {
-              "key": "startTime",
-              "value": "2021-06-22T16:35:00%2B01:00"
-            }
+            "ues"
           ]
         }
       },
