@@ -285,6 +285,79 @@ Output
     dep-rapp-sleepingcelldetector-589647c4c5-rbrw9      1/1     Running            0          4m
 
 
+3. Deploy/Configure Datafile collector and PM mapper
+
+Deploy Datafile collector and PM mapper MS by using the DCAE Dashboard or Cloudify command line.
+
+- Datafile collector deployment: https://wiki.onap.org/pages/viewpage.action?pageId=60891239#DataFileCollector(5GUsecase)-DeploymentSteps
+- PMMapper deployment: https://wiki.onap.org/pages/viewpage.action?pageId=60891174#PMMapper(5GUsecase)-DeploymentSteps
+
+
+Next, update datafile configuration with feed information (where this MS should publishing uploaded files).
+
+::
+
+    Postman -> A1-PE-CLOSED-LOOP -> [CONFIGURE-STEP 1] Get datafile CONSUL key value
+    Postman -> A1-PE-CLOSED-LOOP -> [CONFIGURE-STEP 2] Update feed DATAFILE-COLLECTOR configuration
+
+Also updated publisher's ID and password to feed 1 of Data Router:
+
+::
+
+    Postman -> A1-PE-CLOSED-LOOP -> [CONFIGURE-STEP 3] Updated publisher's DMaaP feed
+
+Without this update we have Error 403 - FORBIDDEN when trying to upload file to DR.
+
+Subscribe PM Mapper to Data Router to receive published files:
+
+::
+
+    Postman -> A1-PE-CLOSED-LOOP -> [CONFIGURE-STEP 5] Subscribe PM Mapper to DMaaP feed
+
+Response will returns subscription ID, 8 in that example:
+
+::
+
+    {
+       "suspend":false,
+       "delivery":{
+          "use100":true,
+          "password":"demo123456!",
+          "user":"dcae@dcae.onap.org",
+          "url":"https://dcae-pm-mapper:8443/delivery"
+       },
+       "subscriber":"dcaecm",
+       "groupid":29,
+       "metadataOnly":false,
+       "privilegedSubscriber":false,
+       "follow_redirect":false,
+       "decompress":true,
+       "aaf_instance":"legacy",
+       "links":{
+          "feed":"https://dmaap-dr-prov/feed/1",
+          "log":"https://dmaap-dr-prov/sublog/8",
+          "self":"https://dmaap-dr-prov/subs/8"
+       },
+       "created_date":1634290495896,
+       "decompress": true
+    }
+
+
+4. Update AAF permission
+
+Before updating AAF permission the PMMapper microservice must be deploy, because during this process
+:topic.org.onap.dmaap.mr.PERFORMANCE_MEASUREMENTS permission instance will be created.
+
+Got to AAF gui under https://{{k8s}}:30251/gui/cui and login as a dcae@dcae.onap.org with password demo123456!.
+Next, execute below command:
+
+::
+
+    perm grant org.onap.dmaap.mr.topic :topic.org.onap.dmaap.mr.PERFORMANCE_MEASUREMENTS sub org.onap.dcae.pmPublisher
+
+To add sub action to org.onap.dcae.pmPublisher role that dcae@dcae.onap.org user can use to read information from
+*PERFORMANCE_MEASUREMENTS* topic.
+
 Executing the A1 PE Closed-loop
 +++++++++++++++++++++++++++++++
 
