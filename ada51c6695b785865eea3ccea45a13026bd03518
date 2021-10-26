@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "85f9848d_a1fd047f",
+        "filename": "operations/a1-pe-sim-packages/resources/oran-sim-csar/MANIFEST.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 5335
+      },
+      "writtenOn": "2021-10-26T13:06:36Z",
+      "side": 0,
+      "message": "[Major] We should also remove dummy heat file/definition from source code -\u003e https://gerrit.onap.org/r/gitweb?p\u003dintegration/usecases/A1-policy-enforcement.git;a\u003dblob;f\u003doperations/a1-pe-sim-packages/resources/oran-sim-csar/o-ran-simulator.yml;h\u003d93bbcfa1767571efbda4fbe6869d4296c119f05d;hb\u003drefs/heads/master (operations/a1-pe-sim-packages/resources/oran-sim-csar/o-ran-simulator.yml) - this is the dummy heat that we don\u0027t use anymore.",
+      "revId": "ada51c6695b785865eea3ccea45a13026bd03518",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
