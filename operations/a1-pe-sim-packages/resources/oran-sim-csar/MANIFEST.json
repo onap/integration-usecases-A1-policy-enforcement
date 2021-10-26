@@ -7,13 +7,10 @@
       "type": "CONTROLLER_BLUEPRINT_ARCHIVE"
     },
     {
-      "file": "o-ran-simulator.yml",
-      "type": "HEAT",
-      "isBase": "true"
-    },
-    {
-      "file": "o-ran-simulator_cloudtech_k8s_charts.tgz",
-      "type": "CLOUD_TECHNOLOGY_SPECIFIC_ARTIFACT"
+      "file": "helm_simulator.tgz",
+      "isBase": true,
+      "type": "HELM"
     }
   ]
 }
+
