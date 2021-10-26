@@ -189,11 +189,11 @@
           },
           "o-ran-simulator-template": {
             "type": "artifact-template-velocity",
-            "file": "Templates/o-ran-simulator-template.vtl"
+            "file": "Templates/helm_simulator-template.vtl"
           },
           "o-ran-simulator-mapping": {
             "type": "artifact-mapping-resource",
-            "file": "Templates/o-ran-simulator-mapping.json"
+            "file": "Templates/helm_simulator-mapping.json"
           }
         }
       },
