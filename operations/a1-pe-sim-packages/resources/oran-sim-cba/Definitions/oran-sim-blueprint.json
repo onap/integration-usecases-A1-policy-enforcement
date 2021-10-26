@@ -5,7 +5,7 @@
     "author-email": "l.kaihlavirt@partner.samsung.com",
     "user-groups": "ADMIN, OPERATION",
     "template_name": "a1_pe_simulator",
-    "template_version": "1.3.2",
+    "template_version": "2.0.0",
     "template_tags": "samsung, oran",
     "template_type": "DEFAULT"
   },
@@ -189,11 +189,11 @@
           },
           "o-ran-simulator-template": {
             "type": "artifact-template-velocity",
-            "file": "Templates/o-ran-simulator-template.vtl"
+            "file": "Templates/helm_simulator-template.vtl"
           },
           "o-ran-simulator-mapping": {
             "type": "artifact-mapping-resource",
-            "file": "Templates/o-ran-simulator-mapping.json"
+            "file": "Templates/helm_simulator-mapping.json"
           }
         }
       },
