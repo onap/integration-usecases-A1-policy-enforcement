@@ -31,9 +31,9 @@
   </fileSets>
   <files>
     <file>
-      <source>target/oran-sim-helm.tar.gz</source>
+      <source>target/simulator.tar.gz</source>
       <outputDirectory>/</outputDirectory>
-      <destName>o-ran-simulator_cloudtech_k8s_charts.tgz</destName>
+      <destName>helm_simulator.tgz</destName>
     </file>
     <file>
       <source>target/oran-sim-cba.zip</source>
