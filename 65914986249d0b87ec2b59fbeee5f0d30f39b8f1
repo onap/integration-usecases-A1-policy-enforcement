@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ac9fba2c_4e34434f",
+        "filename": "doc/dosc_A1_PE_PoC.rst",
+        "patchSetId": 3
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-10-26T06:46:15Z",
+      "side": 1,
+      "message": "you can split this long sentence into 2 to make it more clear what is checked periodically",
+      "revId": "65914986249d0b87ec2b59fbeee5f0d30f39b8f1",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
