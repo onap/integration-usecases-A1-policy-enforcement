@@ -59,7 +59,7 @@ Create VF and Service Service -> Properties Assignment -> Choose VF (at right bo
 
     sdnc_model_name - a1_pe_simulator
 
-    sdnc_model_version - 1.3.2
+    sdnc_model_version - 2.0.0
 
     controller_actor - CDS
 
