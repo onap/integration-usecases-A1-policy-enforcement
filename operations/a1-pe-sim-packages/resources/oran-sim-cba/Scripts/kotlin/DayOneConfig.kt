@@ -25,7 +25,6 @@ import org.apache.commons.compress.archivers.ArchiveEntry
 import org.apache.commons.compress.archivers.ArchiveInputStream
 import org.apache.commons.compress.archivers.tar.TarArchiveInputStream
 import org.apache.commons.compress.compressors.gzip.GzipCompressorInputStream
-import org.apache.commons.io.FileUtils
 import org.apache.commons.io.IOUtils
 import org.apache.http.client.ClientProtocolException
 import org.apache.http.client.entity.EntityBuilder
@@ -44,6 +43,7 @@ import org.onap.ccsdk.cds.controllerblueprints.core.utils.ArchiveType
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.BluePrintArchiveUtils
 import org.onap.ccsdk.cds.controllerblueprints.core.utils.JacksonUtils
 import org.slf4j.LoggerFactory
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.MediaType
@@ -65,7 +65,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
     }
 
     override suspend fun processNB(executionRequest: ExecutionServiceInput) {
-        log.info("DAY-1 Script excution Started")
+        log.info("DAY-1 Script execution Started")
 
         val baseK8sApiUrl = getDynamicProperties("api-access").get("url").asText()
         val k8sApiUsername = getDynamicProperties("api-access").get("username").asText()
@@ -115,26 +115,23 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                 val vfModuleUUID: String = item.get("model-version-id").asText()
                 log.info("AAI Vf-module UUID is : $vfModuleUUID")
 
-                val vfModuleInstance: String = item.get("heat-stack-id").asText()
-                log.info("AAI Vf-module Heat Stack ID : $vfModuleInstance")
+                var multiCloudK8sInstanceID: String = item.get("heat-stack-id").asText()
+                log.info("K8S instance ID is : $multiCloudK8sInstanceID")
 
-                var delimiter = "/"
+                val delimiter = "/"
+                if (multiCloudK8sInstanceID.contains(delimiter)) {
+                    multiCloudK8sInstanceID = multiCloudK8sInstanceID.split(delimiter)[1]
+                }
 
-                val Instance = vfModuleInstance.split(delimiter)
-                val instanceName = Instance[0]
-                val instanceID = Instance[1]
-                log.info("instance name is : $instanceName")
-                log.info("K8S instance ID is : $instanceID")
-
-                val typOfVfmodule = "cnf"
-                log.info("Type of vf-module: $typOfVfmodule")
+                val typOfVfModule = "cnf"
+                log.info("Type of vf-module: $typOfVfModule")
 
                 val k8sRbProfileName = "default"
 
                 val k8sConfigTemplateName = "template_$vfModuleID"
 
                 val configApi = K8sConfigTemplateApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleInvariantID, vfModuleUUID, k8sConfigTemplateName)
-                val instanceApi = K8sInstanceApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleInvariantID, vfModuleUUID, instanceID)
+                val instanceApi = K8sInstanceApi(k8sApiUsername, k8sApiPassword, baseK8sApiUrl, vfModuleInvariantID, vfModuleUUID, multiCloudK8sInstanceID)
 
                 // Check if definition exists
                 if (!configApi.hasDefinition()) {
@@ -144,13 +141,13 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
                 log.info("Config Template name: $k8sConfigTemplateName")
 
                 val configmapName = "res-default-a1-pe-simulator-app-cm"
-                log.info("configmap retrieved " + typOfVfmodule + " vfmodule -> " + configmapName)
-                modifyTemplate(configmapName, typOfVfmodule)
+                log.info("configmap retrieved $typOfVfModule vfmodule -> $configmapName")
+                modifyTemplate(configmapName, typOfVfModule)
 
-                var configTemplate = K8sConfigTemplate()
+                val configTemplate = K8sConfigTemplate()
                 configTemplate.templateName = k8sConfigTemplateName
                 configTemplate.description = " "
-                configTemplate.ChartName = typOfVfmodule
+                configTemplate.ChartName = typOfVfModule
                 log.info("Chart name: ${configTemplate.ChartName}")
 
                 if (!configApi.hasConfigTemplate(configTemplate)) {
@@ -176,42 +173,50 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
             log.info("DAY-1 Script excution completed")
         } catch (e: Exception) {
             log.info("Caught exception trying to get the vnf Details!!")
-            log.warn("${e}")
+            log.warn("Error details: ", e)
         }
     }
 
-    suspend fun getUes(): String {
+    private suspend fun getUes(): String? {
         val resolutionKey = getDynamicProperties("resolution-key").asText()
 
-        val ues = storedContentFromResolvedArtifactNB(resolutionKey, "ues")
+        val ues = getFromResolvedArtifactByResolutionKey(resolutionKey, "ues")
         log.info("ues: $ues")
 
         return ues
     }
 
-    suspend fun getVes(): String {
+    private suspend fun getVes(): String? {
         val resolutionKey = getDynamicProperties("resolution-key").asText()
 
-        val ves = storedContentFromResolvedArtifactNB(resolutionKey, "ves")
+        val ves = getFromResolvedArtifactByResolutionKey(resolutionKey, "ves")
         log.info("ves: $ves")
 
         return ves
     }
 
-    suspend fun getCells(): String {
+    private suspend fun getCells(): String? {
         val resolutionKey = getDynamicProperties("resolution-key").asText()
 
-        val cells = storedContentFromResolvedArtifactNB(resolutionKey, "cells")
+        val cells = getFromResolvedArtifactByResolutionKey(resolutionKey, "cells")
         log.info("cells: $cells")
 
         return cells
+    }
+
+    private suspend fun getFromResolvedArtifactByResolutionKey(resolutionKey: String, artifactName: String): String? {
+        try {
+            return storedContentFromResolvedArtifactNB(resolutionKey, artifactName)
+        } catch (e: EmptyResultDataAccessException) {
+            throw RuntimeException("Can't find the ${artifactName} in CDS resolved artifact by using resolutionKey=${resolutionKey}")
+        }
     }
 
     fun prepareConfigTemplateJson(): Path {
         val bluePrintContext = bluePrintRuntimeService.bluePrintContext()
         val bluePrintBasePath: String = bluePrintContext.rootPath
 
-        var profileFilePath: Path = Paths.get(bluePrintBasePath.plus(File.separator).plus("Templates").plus(File.separator).plus("k8s-profiles").plus(File.separator).plus("cnf-config-template.tar.gz"))
+        val profileFilePath: Path = Paths.get(bluePrintBasePath.plus(File.separator).plus("Templates").plus(File.separator).plus("k8s-profiles").plus(File.separator).plus("cnf-config-template.tar.gz"))
         log.info("Reading K8s Config Template file: $profileFilePath")
 
         val profileFile = profileFilePath.toFile()
@@ -278,7 +283,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 
         val destPath: String = "/tmp/config-template-" + typOfVfmodule
 
-        var templateFilePath: Path = Paths.get(bluePrintBasePath.plus(File.separator).plus("Templates").plus(File.separator).plus("k8s-profiles").plus(File.separator).plus("cnf-config-template.tar.gz"))
+        val templateFilePath: Path = Paths.get(bluePrintBasePath.plus(File.separator).plus("Templates").plus(File.separator).plus("k8s-profiles").plus(File.separator).plus("cnf-config-template.tar.gz"))
 
         log.info("Reading config template file: $templateFilePath")
         val templateFile = templateFilePath.toFile()
@@ -347,9 +352,9 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         File(manifestFileName2).copyTo(File(destOverrideFile), true)
 
         if (!BluePrintArchiveUtils.compress(
-                        decompressedProfile2, templateFilePath.toFile(),
-                        ArchiveType.TarGz
-                )
+                decompressedProfile2, templateFilePath.toFile(),
+                ArchiveType.TarGz
+            )
         ) {
             throw BluePrintProcessorException("Profile compression has failed")
         }
@@ -360,22 +365,22 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
     }
 
     inner class K8sInstanceApi(
-            val username: String,
-            val password: String,
-            val baseUrl: String,
-            val definition: String,
-            val definitionVersion: String,
-            val instanceID: String
+        val username: String,
+        val password: String,
+        val baseUrl: String,
+        val definition: String,
+        val definitionVersion: String,
+        val instanceID: String
     ) {
         private val service: UploadConfigTemplateRestClientService // BasicAuthRestClientService
 
         init {
-            var mapOfHeaders = hashMapOf<String, String>()
+            val mapOfHeaders = hashMapOf<String, String>()
             mapOfHeaders.put("Accept", "application/json")
             mapOfHeaders.put("Content-Type", "application/json")
             mapOfHeaders.put("cache-control", " no-cache")
             mapOfHeaders.put("Accept", "application/json")
-            var basicAuthRestClientProperties: BasicAuthRestClientProperties = BasicAuthRestClientProperties()
+            val basicAuthRestClientProperties: BasicAuthRestClientProperties = BasicAuthRestClientProperties()
             basicAuthRestClientProperties.username = username
             basicAuthRestClientProperties.password = password
             basicAuthRestClientProperties.url = "$baseUrl/v1/instance/$instanceID"
@@ -407,12 +412,12 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 
             val configJsonString: String = objectMapper.writeValueAsString(configJson)
 
-            log.info("payload generated -> " + configJsonString)
+            log.info("payload generated -> $configJsonString")
 
             try {
                 val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(
-                        HttpMethod.POST.name,
-                        "/config", configJsonString
+                    HttpMethod.POST.name,
+                    "/config", configJsonString
                 )
                 if (result.status < 200 || result.status >= 300) {
                     throw Exception(result.body)
@@ -436,7 +441,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 
             val resourceType = object : TypeToken<Array<K8sResources>>() {}.type
 
-            var resources: Array<K8sResources> = gson.fromJson(subStr, resourceType)
+            val resources: Array<K8sResources> = gson.fromJson(subStr, resourceType)
 
             for (resource in resources) {
 
@@ -450,22 +455,22 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
     }
 
     inner class K8sConfigTemplateApi(
-            val username: String,
-            val password: String,
-            val baseUrl: String,
-            val definition: String,
-            val definitionVersion: String,
-            val configTemplateName: String
+        val username: String,
+        val password: String,
+        val baseUrl: String,
+        val definition: String,
+        val definitionVersion: String,
+        val configTemplateName: String
     ) {
         private val service: UploadConfigTemplateRestClientService // BasicAuthRestClientService
 
         init {
-            var mapOfHeaders = hashMapOf<String, String>()
+            val mapOfHeaders = hashMapOf<String, String>()
             mapOfHeaders.put("Accept", "application/json")
             mapOfHeaders.put("Content-Type", "application/json")
             mapOfHeaders.put("cache-control", " no-cache")
             mapOfHeaders.put("Accept", "application/json")
-            var basicAuthRestClientProperties: BasicAuthRestClientProperties = BasicAuthRestClientProperties()
+            val basicAuthRestClientProperties: BasicAuthRestClientProperties = BasicAuthRestClientProperties()
             basicAuthRestClientProperties.username = username
             basicAuthRestClientProperties.password = password
             basicAuthRestClientProperties.url = "$baseUrl/v1/rb/definition/$definition/$definitionVersion"
@@ -505,9 +510,9 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
             val profileJsonString: String = objectMapper.writeValueAsString(profile)
             try {
                 val result: BlueprintWebClientService.WebClientResponse<String> = service.exchangeResource(
-                        HttpMethod.POST.name,
-                        "/config-template",
-                        profileJsonString
+                    HttpMethod.POST.name,
+                    "/config-template",
+                    profileJsonString
                 )
 
                 if (result.status >= 200 && result.status < 300) {
@@ -523,8 +528,8 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
         fun uploadConfigTemplateContent(profile: K8sConfigTemplate, filePath: Path) {
             try {
                 val result: BlueprintWebClientService.WebClientResponse<String> = service.uploadBinaryFile(
-                        "/config-template/${profile.templateName}/content",
-                        filePath
+                    "/config-template/${profile.templateName}/content",
+                    filePath
                 )
                 if (result.status < 200 || result.status >= 300) {
                     throw Exception(result.body)
@@ -538,19 +543,19 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 }
 
 class UploadConfigTemplateRestClientService(
-        private val restClientProperties: BasicAuthRestClientProperties
+    private val restClientProperties: BasicAuthRestClientProperties
 ) : BlueprintWebClientService {
 
     override fun defaultHeaders(): Map<String, String> {
 
         val encodedCredentials = setBasicAuth(
-                restClientProperties.username,
-                restClientProperties.password
+            restClientProperties.username,
+            restClientProperties.password
         )
         return mapOf(
-                HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
-                HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
-                HttpHeaders.AUTHORIZATION to "Basic $encodedCredentials"
+            HttpHeaders.CONTENT_TYPE to MediaType.APPLICATION_JSON_VALUE,
+            HttpHeaders.ACCEPT to MediaType.APPLICATION_JSON_VALUE,
+            HttpHeaders.AUTHORIZATION to "Basic $encodedCredentials"
         )
     }
 
@@ -566,11 +571,11 @@ class UploadConfigTemplateRestClientService(
 
         if (!headers.containsKey(HttpHeaders.AUTHORIZATION)) {
             val encodedCredentials = setBasicAuth(
-                    restClientProperties.username,
-                    restClientProperties.password
+                restClientProperties.username,
+                restClientProperties.password
             )
             customHeaders[HttpHeaders.AUTHORIZATION] =
-                    "Basic $encodedCredentials"
+                "Basic $encodedCredentials"
         }
         return super.convertToBasicHeaders(customHeaders)
     }
@@ -578,7 +583,7 @@ class UploadConfigTemplateRestClientService(
     private fun setBasicAuth(username: String, password: String): String {
         val credentialsString = "$username:$password"
         return Base64.getEncoder().encodeToString(
-                credentialsString.toByteArray(Charset.defaultCharset())
+            credentialsString.toByteArray(Charset.defaultCharset())
         )
     }
 
