@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d15c85df_3a62ecf6",
+        "filename": "operations/a1-pe-sim-packages/resources/oran-sim-cba/Scripts/kotlin/DayOneConfig.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 6697
+      },
+      "writtenOn": "2021-11-04T09:58:36Z",
+      "side": 1,
+      "message": "Should it be info level?",
+      "revId": "6b3a4db0287e198efdd1c8f2f576ac853802651c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "419668ab_bcf2eaa1",
+        "filename": "operations/a1-pe-sim-packages/resources/oran-sim-cba/Scripts/kotlin/DayOneConfig.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 6697
+      },
+      "writtenOn": "2021-11-04T09:58:36Z",
+      "side": 1,
+      "message": "debug/warning here?",
+      "revId": "6b3a4db0287e198efdd1c8f2f576ac853802651c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
