@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f1987eab_af84bd12",
+        "filename": "operations/a1-pe-sim-packages/resources/oran-sim-cba/Scripts/kotlin/DayOneConfig.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 5335
+      },
+      "writtenOn": "2021-11-04T10:04:40Z",
+      "side": 1,
+      "message": "Good point: \nAs far I remember line 175 was changed in the past from warn to info to not be too noisy.\nI think the best idea will be to have one log message like:\n\nlog.info(\"Caught exception during preparing the request: \", e)",
+      "parentUuid": "d15c85df_3a62ecf6",
+      "revId": "6b3a4db0287e198efdd1c8f2f576ac853802651c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "419668ab_bcf2eaa1",
         "filename": "operations/a1-pe-sim-packages/resources/oran-sim-cba/Scripts/kotlin/DayOneConfig.kt",
         "patchSetId": 3
@@ -30,6 +48,24 @@
       "writtenOn": "2021-11-04T09:58:36Z",
       "side": 1,
       "message": "debug/warning here?",
+      "revId": "6b3a4db0287e198efdd1c8f2f576ac853802651c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e701bfee_fb9d9a39",
+        "filename": "operations/a1-pe-sim-packages/resources/oran-sim-cba/Scripts/kotlin/DayOneConfig.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 5335
+      },
+      "writtenOn": "2021-11-04T10:04:40Z",
+      "side": 1,
+      "message": "Will be logged in the 176 line so I think is no need to log something here",
+      "parentUuid": "419668ab_bcf2eaa1",
       "revId": "6b3a4db0287e198efdd1c8f2f576ac853802651c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
