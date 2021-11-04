@@ -9,7 +9,8 @@
     {
       "file": "helm_simulator.tgz",
       "type": "HELM",
-      "isBase": "true"
+      "isBase": true
     }
   ]
 }
+
