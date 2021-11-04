@@ -16,6 +16,24 @@
       "revId": "ada51c6695b785865eea3ccea45a13026bd03518",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4100f655_34f43fb4",
+        "filename": "operations/a1-pe-sim-packages/resources/oran-sim-csar/MANIFEST.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 5335
+      },
+      "writtenOn": "2021-11-04T09:47:22Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "85f9848d_a1fd047f",
+      "revId": "ada51c6695b785865eea3ccea45a13026bd03518",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": false
     }
   ]
 }
