@@ -37,6 +37,24 @@
     },
     {
       "key": {
+        "uuid": "4cec89c6_a966b043",
+        "filename": "operations/a1-pe-sim-packages/resources/oran-sim-cba/Scripts/kotlin/DayOneConfig.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-11-04T10:06:53Z",
+      "side": 1,
+      "message": "generally this it too chatty, but I would leave it as it is for now",
+      "parentUuid": "d15c85df_3a62ecf6",
+      "revId": "6b3a4db0287e198efdd1c8f2f576ac853802651c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "419668ab_bcf2eaa1",
         "filename": "operations/a1-pe-sim-packages/resources/oran-sim-cba/Scripts/kotlin/DayOneConfig.kt",
         "patchSetId": 3
@@ -65,6 +83,24 @@
       "writtenOn": "2021-11-04T10:04:40Z",
       "side": 1,
       "message": "Will be logged in the 176 line so I think is no need to log something here",
+      "parentUuid": "419668ab_bcf2eaa1",
+      "revId": "6b3a4db0287e198efdd1c8f2f576ac853802651c",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ec2a0fc_8b622197",
+        "filename": "operations/a1-pe-sim-packages/resources/oran-sim-cba/Scripts/kotlin/DayOneConfig.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-11-04T10:06:53Z",
+      "side": 1,
+      "message": "no, as you are rethrowing so somewhere in the call stack it will be reported",
       "parentUuid": "419668ab_bcf2eaa1",
       "revId": "6b3a4db0287e198efdd1c8f2f576ac853802651c",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
