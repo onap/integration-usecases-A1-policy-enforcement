@@ -45,7 +45,7 @@
                             <goal>single</goal>
                         </goals>
                         <configuration>
-                            <finalName>oran-sim-helm</finalName>
+                            <finalName>simulator</finalName>
                             <appendAssemblyId>false</appendAssemblyId>
                             <descriptors>
                                 <descriptor>helm-resource.xml</descriptor>
