@@ -171,6 +171,81 @@
       },
       "derived_from": "tosca.nodes.Component"
     },
+    "component-k8s-profile-upload": {
+      "attributes": {
+        "statuses": {
+          "required": true,
+          "type": "json"
+        }
+      },
+      "capabilities": {
+        "component-node": {
+          "type": "tosca.capabilities.Node"
+        }
+      },
+      "derived_from": "tosca.nodes.Component",
+      "description": "This component is rendering and sending the k8s profile to the multicloud plugin.",
+      "interfaces": {
+        "K8sProfileUploadComponent": {
+          "operations": {
+            "process": {
+              "inputs": {
+                "artifact-prefix-names": {
+                  "description": "Resource Assignment Artifact Prefix names",
+                  "entry_schema": {
+                    "type": "string"
+                  },
+                  "required": false,
+                  "type": "list"
+                },
+                "k8s-rb-definition-name": {
+                  "description": "K8s definition name",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-definition-version": {
+                  "description": "Version of the definition",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-profile-k8s-version": {
+                  "description": "a K8s cluster version for the profile",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-profile-name": {
+                  "description": "K8s profile name",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-profile-namespace": {
+                  "description": "a K8s namespace for the profile",
+                  "required": false,
+                  "type": "string"
+                },
+                "k8s-rb-profile-source": {
+                  "description": "Source (tgz/folder) for the template in CBA",
+                  "required": false,
+                  "type": "string"
+                },
+                "resource-assignment-map": {
+                  "description": "Holds resolved values for each artifact prefix eg. { vdns: { vnf-id: 123 } }",
+                  "required": false,
+                  "type": "json"
+                }
+              },
+              "outputs": {
+                "statuses": {
+                  "required": true,
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "version": "1.0.0"
+    },
     "source-capability": {
       "description": "This is Component Resource Source Node Type",
       "version": "1.0.0",
