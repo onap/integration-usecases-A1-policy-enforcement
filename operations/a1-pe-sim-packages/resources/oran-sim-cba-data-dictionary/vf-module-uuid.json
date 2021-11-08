@@ -1,0 +1,43 @@
+{
+  "name": "vf-module-uuid",
+  "tags": "vf-module-uuid",
+  "data_type": "string",
+  "description": "vf-module-uuid",
+  "entry_schema": "string",
+  "updatedBy": "Krystian Kedron <k.kedron@partner.samsung.com>",
+  "definition": {
+    "tags": "vf-module-uuid",
+    "name": "vf-module-uuid",
+    "property": {
+      "description": "vf-module-uuid",
+      "type": "string"
+    },
+    "group": "default",
+    "updated-by": "Krystian Kedron <k.kedron@partner.samsung.com>",
+    "sources": {
+      "input": {
+        "type": "source-input"
+      },
+      "default": {
+        "type": "source-default",
+        "properties": {}
+      },
+      "processor-db": {
+        "type": "source-db",
+        "properties": {
+          "type": "SQL",
+          "query": "select sdnctl.VF_MODULE_MODEL.uuid as vf_module_uuid from sdnctl.VF_MODULE_MODEL where sdnctl.VF_MODULE_MODEL.customization_uuid=:customizationid",
+          "input-key-mapping": {
+            "customizationid": "vf-module-model-customization-uuid"
+          },
+          "output-key-mapping": {
+            "vf-module-uuid": "vf_module_uuid"
+          },
+          "key-dependencies": [
+            "vf-module-model-customization-uuid"
+          ]
+        }
+      }
+    }
+  }
+}
