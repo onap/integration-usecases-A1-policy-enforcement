@@ -5,7 +5,7 @@
     "author-email": "l.kaihlavirt@partner.samsung.com",
     "user-groups": "ADMIN, OPERATION",
     "template_name": "a1_pe_simulator",
-    "template_version": "2.0.0",
+    "template_version": "2.0.1",
     "template_tags": "samsung, oran",
     "template_type": "DEFAULT"
   },
@@ -59,7 +59,19 @@
             "target": "resource-assignment",
             "activities": [
               {
-                "call_operation": ""
+                "call_operation": "ResourceResolutionComponent.process"
+              }
+            ],
+            "on_success": [
+              "profile-upload"
+            ]
+          },
+          "profile-upload": {
+            "description": "Generate and upload K8s Profile",
+            "target": "k8s-profile-upload",
+            "activities": [
+              {
+                "call_operation": "ComponentScriptExecutor.process"
               }
             ]
           }
@@ -242,6 +254,34 @@
           "cells-mapping": {
             "type": "artifact-mapping-resource",
             "file": "Templates/cells-mapping.json"
+          }
+        }
+      },
+      "k8s-profile-upload": {
+        "type": "component-k8s-profile-upload",
+        "interfaces": {
+          "K8sProfileUploadComponent": {
+            "operations": {
+              "process": {
+                "inputs": {
+                  "artifact-prefix-names": {
+                    "get_input": "template-prefix"
+                  },
+                  "resource-assignment-map": {
+                    "get_attribute": [
+                      "resource-assignment",
+                      "assignment-map"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "simple": {
+            "type": "artifact-k8sprofile-content",
+            "file": "Templates/k8s-profiles/simple.tgz"
           }
         }
       },

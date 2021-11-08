@@ -11,9 +11,6 @@
         "vnf-id": {
           "type": "string"
         },
-        "ftp-host": {
-          "type": "string"
-        },
         "ftp-port": {
           "type": "string",
           "default": "32022"
@@ -25,6 +22,9 @@
         "ves-port": {
           "type": "string",
           "default": "30417"
+        },
+        "ftp-host": {
+          "type": "string"
         },
         "ues-payload": {
           "type": "string",
@@ -69,18 +69,17 @@
       "description": "Dynamic DataType definition for workflow(resource-assignment).",
       "version": "1.0.0",
       "properties": {
-        "vnf-ip-address": {
-          "description": "",
+        "k8s-rb-profile-namespace": {
+          "description": "K8s namespace to create helm chart for specified RB profile",
           "required": false,
           "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "default": "${vnf-ip-address}",
-          "entry_schema": {
-            "type": ""
-          }
+          "default": "default"
+        },
+        "k8s-rb-profile-name": {
+          "description": "RB Profile name used in k8s plugin to identify Helm chart(s) where this mapping is providing override values.",
+          "required": false,
+          "type": "string",
+          "default": "default"
         },
         "vnf-id": {
           "description": "",
@@ -94,6 +93,17 @@
             "type": ""
           }
         },
+        "k8s-rb-profile-source": {
+          "description": "The source folder or file relative to 'Templates/k8s-profiles' folder",
+          "required": true,
+          "type": "string"
+        },
+        "k8s-rb-instance-release-name": {
+          "description": "Name of the release for the helm package instance in k8s",
+          "required": false,
+          "type": "string",
+          "default": "vfw"
+        },
         "service-instance-id": {
           "description": "",
           "required": false,
@@ -106,19 +116,21 @@
             "type": ""
           }
         },
-        "vnf_name": {
-          "description": "",
+        "k8s-rb-profile-k8s-version": {
+          "description": "K8s cluster version to create helm chart for specified RB profile",
           "required": false,
           "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
+          "default": "1.18.9"
+        },
+        "k8s-rb-definition-version": {
+          "description": "RB Version identifier of Helm chart(s) in k8s plugin",
+          "required": false,
+          "type": "string",
+          "metadata": {
+            "transform-template": "${vf-module-model-customization-uuid}"
           }
         },
-        "vf-module-id": {
+        "vnf_name": {
           "description": "",
           "required": false,
           "type": "string",
@@ -155,9 +167,50 @@
             "type": ""
           }
         },
+        "vf-module-model-customization-uuid": {
+          "description": "",
+          "required": false,
+          "type": "string"
+        },
+        "k8s-rb-definition-name": {
+          "description": "RB Name identifier of Helm chart(s) in k8s plugin",
+          "required": false,
+          "type": "string",
+          "metadata": {
+            "transform-template": "${vf-module-model-invariant-uuid}"
+          }
+        },
+        "vnf-ip-address": {
+          "description": "",
+          "required": false,
+          "type": "string",
+          "status": "",
+          "constraints": [
+            {}
+          ],
+          "default": "${vnf-ip-address}",
+          "entry_schema": {
+            "type": ""
+          }
+        },
+        "vf-module-id": {
+          "description": "",
+          "required": false,
+          "type": "string",
+          "status": "",
+          "constraints": [
+            {}
+          ],
+          "entry_schema": {
+            "type": ""
+          }
+        },
         "vf-module-label": {
           "description": "",
           "required": false,
+          "type": "string"
+        },
+        "vf-module-model-invariant-uuid": {
           "type": "string"
         },
         "vf-naming-policy": {
@@ -172,11 +225,6 @@
           "entry_schema": {
             "type": ""
           }
-        },
-        "vf-module-model-customization-uuid": {
-          "description": "",
-          "required": false,
-          "type": "string"
         }
       },
       "derived_from": "tosca.datatypes.Dynamic"
