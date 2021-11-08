@@ -15,6 +15,11 @@
       "file_ext": [
         "vtl"
       ]
+    },
+    "artifact-k8sprofile-content": {
+      "derived_from": "tosca.artifacts.Implementation",
+      "description": "K8s Profile Folder Artifact",
+      "version": "1.0.0"
     }
   }
 }
