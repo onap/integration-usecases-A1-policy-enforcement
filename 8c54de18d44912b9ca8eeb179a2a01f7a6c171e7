@@ -1,0 +1,7 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Bartek Grzybowski <b.grzybowski@partner.samsung.com>
+Submitted-by: Krystian Kedron <k.kedron@partner.samsung.com>
+Submitted-at: Tue, 16 Nov 2021 10:44:12 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/integration/usecases/A1-policy-enforcement/+/125145
+Project: integration/usecases/A1-policy-enforcement
+Branch: refs/heads/master
