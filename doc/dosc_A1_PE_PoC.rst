@@ -111,6 +111,16 @@ Following steps are needed to setup Postman:
 
 .. note::  The port number 30499 is used in included Postman collection
 
+::
+
+    kubectl edit -n onap svc consul-server-ui
+          - .spec.type: ClusterIP
+          + .spec.type: NodePort
+          + .spec.ports[0].nodePort: 32749
+
+.. note::  The port number 32749 is used in included Postman collection
+
+
 **Postman variables:**
 
 Most of the Postman variables are automated by Postman scripts and environment file provided, but there are few mandatory variables that need to be setup by user.
@@ -194,7 +204,24 @@ Like before, following steps are needed to setup Postman:
 CNF post-instantiation steps
 ++++++++++++++++++++++++++++
 
-1. Register CNF as a RIC in onap-a1policymanagement
+**Register CNF as a RIC in onap-a1policymanagement**
+
+ONAP Policy Management Service support two ways of updating configuration.
+
+Updating configuration is needed to provide information about the new RIC which was deployed.
+
+In our case we must provide information about the new A1 Policy Enforcement Simulator that was deployed by ONAP.
+PMS will be used this information to periodically check the healthiness of this Simulator
+and be able to create new A1 Policy Instances into A1 Policy Enforcement by using A1-P OSC_2.1.0 API.
+
+1. REST request to update PMS configuration (PREFERRED)
+
+::
+
+    [CONFIGURE-STEP 0] Register A1 PE SIM as a Near-RT RIC
+    [TEST] Check if A1 PE SIM register in ONAP-PMS
+
+2. Register CNF as a RIC in onap-a1policymanagement
 
 ::
 
@@ -284,6 +311,90 @@ Output
     dep-rapp-datacollector-84bcd96fc4-pf42g             1/1     Running            0          4m
     dep-rapp-sleepingcelldetector-589647c4c5-rbrw9      1/1     Running            0          4m
 
+
+3. Deploy/Configure Datafile collector and PM mapper
+
+Deploy Datafile collector and PM mapper MS by using the DCAE Dashboard or Cloudify command line.
+
+- Datafile collector deployment: https://wiki.onap.org/pages/viewpage.action?pageId=60891239#DataFileCollector(5GUsecase)-DeploymentSteps
+- PMMapper deployment: https://wiki.onap.org/pages/viewpage.action?pageId=60891174#PMMapper(5GUsecase)-DeploymentSteps
+
+Next you can execute the postman collection to check that the proper consul entry exits:
+
+::
+    [TEST] Check CONSUL PM Mapper  key entry
+
+Next, update datafile configuration with feed information (where this MS should publishing uploaded files).
+
+::
+
+    Postman -> A1-PE-CLOSED-LOOP -> [CONFIGURE-STEP 1] Check datafile CONSUL key value
+    Postman -> A1-PE-CLOSED-LOOP -> [CONFIGURE-STEP 2] Update feed DATAFILE-COLLECTOR configuration
+
+Also updated publisher's ID and password to feed 1 of Data Router:
+
+::
+
+    Postman -> A1-PE-CLOSED-LOOP -> [CONFIGURE-STEP 3] Updated publisher's DMaaP feed
+
+Without this update we have Error 403 - FORBIDDEN when trying to upload file to DR.
+Subscribe PM Mapper to Data Router to receive published files:
+
+::
+
+    Postman -> A1-PE-CLOSED-LOOP -> [CONFIGURE-STEP 4] Subscribe PM Mapper to DMaaP feed
+
+Response will return subscription ID, 8 in that example:
+
+::
+
+    {
+       "suspend":false,
+       "delivery":{
+          "use100":true,
+          "password":"demo123456!",
+          "user":"dcae@dcae.onap.org",
+          "url":"https://dcae-pm-mapper:8443/delivery"
+       },
+       "subscriber":"dcaecm",
+       "groupid":29,
+       "metadataOnly":false,
+       "privilegedSubscriber":false,
+       "follow_redirect":false,
+       "decompress":true,
+       "aaf_instance":"legacy",
+       "links":{
+          "feed":"https://dmaap-dr-prov/feed/1",
+          "log":"https://dmaap-dr-prov/sublog/8",
+          "self":"https://dmaap-dr-prov/subs/8"
+       },
+       "created_date":1634290495896,
+       "decompress": true
+    }
+
+
+This ID will be use to update the PM Mapper configuration:
+
+::
+
+    [CONFIGURE-STEP 5] Update feed PM Mapper configuration
+    [TEST] Check PM Mapper CONSUL configuration
+
+
+4. Update AAF permission
+
+Before updating AAF permission the PMMapper microservice must be deploy, because during this process
+:topic.org.onap.dmaap.mr.PERFORMANCE_MEASUREMENTS permission instance will be created.
+
+Next go to AAF webconsole under https://aaf.api.simpledemo.onap.org:30251/gui/cui and login as a dcae@dcae.onap.org with password demo123456!.
+Execute below command:
+
+::
+
+    perm grant org.onap.dmaap.mr.topic :topic.org.onap.dmaap.mr.PERFORMANCE_MEASUREMENTS sub org.onap.dcae.pmPublisher
+
+To add sub action to org.onap.dcae.pmPublisher role that dcae@dcae.onap.org user can use to read information from
+*PERFORMANCE_MEASUREMENTS* topic.
 
 Executing the A1 PE Closed-loop
 +++++++++++++++++++++++++++++++
