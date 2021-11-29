@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "146ebd2a_670d34cf",
+        "filename": "operations/a1-pe-sim-packages/pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 6863
+      },
+      "writtenOn": "2021-11-29T12:02:37Z",
+      "side": 1,
+      "message": "DayOneConfig.kt was renamed to  DayTwoConfig.kt so I suppose it should be same here",
+      "range": {
+        "startLine": 39,
+        "startChar": 0,
+        "endLine": 40,
+        "endChar": 116
+      },
+      "revId": "3204ea5b0cde8b6bcec4a31437b2eeb4c2ebb3e2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4b2ddb83_5d975d82",
         "filename": "operations/a1-pe-sim-packages/resources/day-one-config/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/scripts/DayTwoConfig.kt",
         "patchSetId": 3
