@@ -39,6 +39,24 @@
       "revId": "3204ea5b0cde8b6bcec4a31437b2eeb4c2ebb3e2",
       "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a12c027f_456a3f9e",
+        "filename": "operations/a1-pe-sim-packages/resources/day-one-config/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/scripts/DayTwoConfig.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 5335
+      },
+      "writtenOn": "2021-11-29T12:25:02Z",
+      "side": 1,
+      "message": "That was copy-paste mistake on the first place",
+      "parentUuid": "4b2ddb83_5d975d82",
+      "revId": "3204ea5b0cde8b6bcec4a31437b2eeb4c2ebb3e2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
     }
   ]
 }
