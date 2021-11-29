@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4b2ddb83_5d975d82",
+        "filename": "operations/a1-pe-sim-packages/resources/day-one-config/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/scripts/DayTwoConfig.kt",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-11-29T11:34:55Z",
+      "side": 1,
+      "message": "it looks like Samsung should be only added not replacing TechMahindra",
+      "revId": "3204ea5b0cde8b6bcec4a31437b2eeb4c2ebb3e2",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
