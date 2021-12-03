@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c8cd6895_0a0ef447",
+        "filename": "operations/a1-pe-sim-packages/resources/day-two-config/src/main/kotlin/org/onap/ccsdk/cds/blueprintsprocessor/services/execution/scripts/DayTwoConfig.kt",
+        "patchSetId": 4
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-12-03T09:47:00Z",
+      "side": 1,
+      "message": "should include techmahindra also",
+      "revId": "a5e2f21266fe6b5ea8f56ce6ae6a7bcdfd059d8e",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
