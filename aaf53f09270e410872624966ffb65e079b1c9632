@@ -1,0 +1,7 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+2: Morgan Richomme <morgan.richomme@orange.com>
+Submitted-by: Morgan Richomme <morgan.richomme@orange.com>
+Submitted-at: Fri, 10 Dec 2021 13:05:37 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/integration/usecases/A1-policy-enforcement/+/125883
+Project: integration/usecases/A1-policy-enforcement
+Branch: refs/heads/master
