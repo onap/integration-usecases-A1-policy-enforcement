@@ -1,0 +1,10 @@
+Verified+1: ONAP Jobbuilder <onap-jobbuilder@jenkins.onap.org>
+Code-Review+1: Grzegorz Wielgosinski <g.wielgosins@samsung.com>
+Code-Review+1: Maciej Lisowski <m.lisowski2@partner.samsung.com>
+Code-Review+2: Pawel Slowikowski <p.slowikows2@samsung.com>
+Code-Review+1: Marcin  Krasowski <m.krasowski@samsung.com>
+Submitted-by: Pawel Slowikowski <p.slowikows2@samsung.com>
+Submitted-at: Tue, 14 Dec 2021 09:03:43 +0000
+Reviewed-on: https://gerrit.onap.org/r/c/integration/usecases/A1-policy-enforcement/+/125616
+Project: integration/usecases/A1-policy-enforcement
+Branch: refs/heads/master
