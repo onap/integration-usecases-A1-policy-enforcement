@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "68fec6c5_6c4baa9c",
+        "filename": "operations/a1-pe-sim-packages/resources/oran-sim-cba/Definitions/resources_definition_types.json",
+        "patchSetId": 11
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 6641
+      },
+      "writtenOn": "2021-12-14T08:22:48Z",
+      "side": 1,
+      "message": "Is the updater correct ?",
+      "revId": "fb234c1c815ea87ed809468661f2293f777e92d3",
+      "serverId": "14b4e41f-c4e3-4fb9-9955-6a9b5656895a",
+      "unresolved": true
+    }
+  ]
+}
