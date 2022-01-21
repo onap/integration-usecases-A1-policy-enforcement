@@ -3,6 +3,6 @@ CSAR-Version: 1.0
 Created-By: Lasse Kaihlavirta
 Entry-Definitions: Definitions/oran-sim-blueprint.json
 Template-Name: a1_pe_simulator
-Template-Version: 2.0.1
+Template-Version: 2.0.24
 Template-Tags: samsung, oran
 Content-Type: application/vnd.oasis.bpmn
