@@ -5,7 +5,7 @@
     "author-email": "l.kaihlavirt@partner.samsung.com",
     "user-groups": "ADMIN, OPERATION",
     "template_name": "a1_pe_simulator",
-    "template_version": "2.0.1",
+    "template_version": "2.0.2",
     "template_tags": "samsung, oran",
     "template_type": "DEFAULT"
   },
@@ -148,23 +148,39 @@
               }
             ],
             "on_success": [
-              "imperative-workflow-step-1"
+              "config-setup"
             ]
           },
-          "imperative-workflow-step-1": {
-            "description": "Config Deploy workflow",
-            "target": "execute-post",
+          "config-setup": {
+            "description": "Gather necessary input for config template upload",
+            "target": "config-setup-process",
             "activities": [
               {
-                "call_operation": "ComponentScriptExecutor.process"
+                "call_operation": "ResourceResolutionComponent.process"
+              }
+            ],
+            "on_success": [
+              "config-template"
+            ]
+          },
+          "config-template": {
+            "description": "Generate and upload K8s config template",
+            "target": "k8s-config-template",
+            "activities": [
+              {
+                "call_operation": "K8sConfigTemplateComponent.process"
               }
             ]
           }
         },
         "inputs": {
           "resolution-key": {
-            "required": false,
+            "required": true,
             "type": "string"
+          },
+          "store-result": {
+            "required": true,
+            "type": "boolean"
           },
           "config-deploy-properties": {
             "description": "Dynamic PropertyDefinition for workflow(config-deploy).",
@@ -315,19 +331,74 @@
           }
         }
       },
-      "execute-post": {
-        "type": "component-script-executor",
+      "config-setup-process": {
+        "type": "component-resource-resolution",
         "interfaces": {
-          "ComponentScriptExecutor": {
+          "ResourceResolutionComponent": {
             "operations": {
               "process": {
                 "inputs": {
-                  "script-type": "kotlin",
-                  "script-class-reference": "org.onap.ccsdk.cds.blueprintsprocessor.services.execution.scripts.DayOneConfig",
-                  "dynamic-properties": "*config-deploy-properties"
+                  "resolution-key": {
+                    "get_input": "resolution-key"
+                  },
+                  "store-result": false,
+                  "artifact-prefix-names": [
+                    "config-deploy"
+                  ]
+                },
+                "outputs": {
+                  "resource-assignment-params": {
+                    "get_attribute": [
+                      "SELF",
+                      "assignment-params"
+                    ]
+                  },
+                  "status": "success"
                 }
               }
             }
+          }
+        },
+        "artifacts": {
+          "config-deploy-template": {
+            "type": "artifact-template-velocity",
+            "file": "Templates/config-setup-template.vtl"
+          },
+          "config-deploy-mapping": {
+            "type": "artifact-mapping-resource",
+            "file": "Templates/config-setup-mapping.json"
+          }
+        }
+      },
+      "k8s-config-template": {
+        "type": "component-k8s-config-template",
+        "interfaces": {
+          "K8sConfigTemplateComponent": {
+            "operations": {
+              "process": {
+                "inputs": {
+                  "artifact-prefix-names": [
+                    "helm_simulator"
+                  ],
+                  "resource-assignment-map": {
+                    "get_attribute": [
+                      "config-setup-process",
+                      "",
+                      "assignment-map",
+                      "config-deploy",
+                      "config-deploy-setup",
+                      "assignment-params"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "artifacts": {
+          "cnf-config": {
+            "type": "artifact-k8sconfig-content",
+            "file": "Templates/k8s-configs/cnf-config-template.tar.gz"
           }
         }
       }
