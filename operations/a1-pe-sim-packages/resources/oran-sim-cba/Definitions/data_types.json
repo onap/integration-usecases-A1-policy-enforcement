@@ -1,239 +1,245 @@
 {
-  "data_types": {
-    "dt-config-assign-properties": {
-      "description": "Dynamic DataType definition for workflow(config-assign).",
-      "version": "1.0.0",
-      "properties": {
-        "rep-period": {
-          "type": "string",
-          "default": "60"
+  "data_types" : {
+    "dt-config-assign-properties" : {
+      "description" : "Dynamic DataType definition for workflow(config-assign).",
+      "version" : "1.0.0",
+      "properties" : {
+        "rep-period" : {
+          "type" : "string",
+          "default" : "60"
         },
-        "vnf-id": {
-          "type": "string"
+        "vnf-id" : {
+          "type" : "string"
         },
-        "ftp-port": {
-          "type": "string",
-          "default": "32022"
+        "ftp-port" : {
+          "type" : "string",
+          "default" : "32022"
         },
-        "cells-payload": {
-          "type": "string",
-          "default": ""
+        "cells-payload" : {
+          "type" : "string",
+          "default" : ""
         },
-        "ves-port": {
-          "type": "string",
-          "default": "30417"
+        "ves-port" : {
+          "type" : "string",
+          "default" : "30417"
         },
-        "ftp-host": {
-          "type": "string"
+        "ftp-host" : {
+          "type" : "string"
         },
-        "ues-payload": {
-          "type": "string",
-          "default": ""
+        "ues-payload" : {
+          "type" : "string",
+          "default" : ""
         },
-        "ves-user": {
-          "type": "string",
-          "default": "sample1"
+        "ves-user" : {
+          "type" : "string",
+          "default" : "sample1"
         },
-        "externalNodeIp": {
-          "type": "string"
+        "externalNodeIp" : {
+          "type" : "string"
         },
-        "vnf-name": {
-          "type": "string",
-          "default": "oran-sim-name"
+        "vnf-name" : {
+          "type" : "string",
+          "default" : "oran-sim-name"
         },
-        "vnf-type": {
-          "type": "string",
-          "default": "oran-sim-type"
+        "vnf-type" : {
+          "type" : "string",
+          "default" : "oran-sim-type"
         },
-        "ves-password": {
-          "type": "string",
-          "default": "sample1"
+        "ves-password" : {
+          "type" : "string",
+          "default" : "sample1"
         }
       },
-      "derived_from": "tosca.datatypes.Dynamic"
+      "derived_from" : "tosca.datatypes.Dynamic"
     },
-    "dt-config-deploy-properties": {
-      "description": "Dynamic DataType definition for workflow(config-deploy).",
-      "version": "1.0.0",
-      "properties": {
-        "vnf-id": {
-          "type": "string"
+    "dt-config-deploy-properties" : {
+      "description" : "Dynamic DataType definition for workflow(config-deploy).",
+      "version" : "1.0.0",
+      "properties" : {
+        "vnf-id" : {
+          "type" : "string"
         },
-        "service-instance-id": {
-          "type": "string"
+        "service-instance-id" : {
+          "type" : "string"
         }
       },
-      "derived_from": "tosca.datatypes.Dynamic"
+      "derived_from" : "tosca.datatypes.Dynamic"
     },
-    "dt-resource-assignment-properties": {
-      "description": "Dynamic DataType definition for workflow(resource-assignment).",
-      "version": "1.0.0",
-      "properties": {
-        "k8s-rb-profile-namespace": {
-          "description": "K8s namespace to create helm chart for specified RB profile",
-          "required": false,
-          "type": "string",
-          "default": "default"
-        },
-        "k8s-rb-profile-name": {
-          "description": "RB Profile name used in k8s plugin to identify Helm chart(s) where this mapping is providing override values.",
-          "required": false,
-          "type": "string",
-          "default": "simple"
-        },
-        "vnf-id": {
-          "description": "",
-          "required": false,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
+    "dt-resource-assignment-properties" : {
+      "description" : "Dynamic DataType definition for workflow(resource-assignment).",
+      "version" : "1.0.0",
+      "properties" : {
+        "vf-module-name" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
           }
         },
-        "k8s-rb-profile-source": {
-          "description": "The source folder or file relative to 'Templates/k8s-profiles' folder",
-          "required": true,
-          "type": "string",
-          "default": "simple-profile"
+        "k8s-rb-profile-namespace" : {
+          "description" : "K8s namespace to create helm chart for specified RB profile",
+          "required" : false,
+          "type" : "string",
+          "default" : "default"
         },
-        "k8s-rb-instance-release-name": {
-          "description": "Name of the release for the helm package instance in k8s",
-          "required": false,
-          "type": "string",
-          "default": "o-ran-simulator"
+        "k8s-rb-profile-name" : {
+          "description" : "RB Profile name used in k8s plugin to identify Helm chart(s) where this mapping is providing override values.",
+          "required" : false,
+          "type" : "string",
+          "default" : "default"
         },
-        "service-instance-id": {
-          "description": "",
-          "required": false,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
+        "vnf-id" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
           }
         },
-        "k8s-rb-profile-k8s-version": {
-          "description": "K8s cluster version to create helm chart for specified RB profile",
-          "required": false,
-          "type": "string",
-          "default": "1.18.9"
+        "k8s-rb-profile-source" : {
+          "description" : "The source folder or file relative to 'Templates/k8s-profiles' folder",
+          "required" : true,
+          "type" : "string"
         },
-        "k8s-rb-definition-version": {
-          "description": "RB Version identifier of Helm chart(s) in k8s plugin",
-          "required": false,
-          "type": "string",
-          "metadata": {
-            "transform-template": "${vf-module-uuid}"
+        "k8s-rb-instance-release-name" : {
+          "description" : "Name of the release for the helm package instance in k8s",
+          "required" : false,
+          "type" : "string",
+          "default" : "vfw"
+        },
+        "service-instance-id" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
           }
         },
-        "vnf_name": {
-          "description": "",
-          "required": false,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
+        "k8s-rb-profile-k8s-version" : {
+          "description" : "K8s cluster version to create helm chart for specified RB profile",
+          "required" : false,
+          "type" : "string",
+          "default" : "1.18.9"
+        },
+        "k8s-rb-definition-version" : {
+          "description" : "RB Version identifier of Helm chart(s) in k8s plugin",
+          "required" : false,
+          "type" : "string",
+          "metadata" : {
+            "transform-template" : "${vf-module-uuid}"
           }
         },
-        "aic-cloud-region": {
-          "description": "",
-          "required": false,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
+        "vnf_name" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
           }
         },
-        "oran_name": {
-          "description": "",
-          "required": false,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "default": "${oran_name}",
-          "entry_schema": {
-            "type": ""
+        "aic-cloud-region" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
           }
         },
-        "vf-module-uuid": {
-          "description": "",
-          "required": false,
-          "type": "string"
-        },
-        "vf-module-model-customization-uuid": {
-          "description": "",
-          "required": false,
-          "type": "string"
-        },
-        "k8s-rb-definition-name": {
-          "description": "RB Name identifier of Helm chart(s) in k8s plugin",
-          "required": false,
-          "type": "string",
-          "metadata": {
-            "transform-template": "${vf-module-model-invariant-uuid}"
+        "oran_name" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "default" : "${oran_name}",
+          "entry_schema" : {
+            "type" : ""
           }
         },
-        "vnf-ip-address": {
-          "description": "",
-          "required": false,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "default": "${vnf-ip-address}",
-          "entry_schema": {
-            "type": ""
+        "vf-module-uuid" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string"
+        },
+        "vf-module-model-customization-uuid" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string"
+        },
+        "k8s-rb-definition-name" : {
+          "description" : "RB Name identifier of Helm chart(s) in k8s plugin",
+          "required" : false,
+          "type" : "string",
+          "metadata" : {
+            "transform-template" : "${vf-module-model-invariant-uuid}"
           }
         },
-        "vf-module-id": {
-          "description": "",
-          "required": false,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "entry_schema": {
-            "type": ""
+        "k8s-rb-config-template-source" : {
+          "description" : "The source of configuration template for ue-reconfiuration operation",
+          "required" : false,
+          "type" : "string"
+        },
+        "vnf-ip-address" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "default" : "${vnf-ip-address}",
+          "entry_schema" : {
+            "type" : ""
           }
         },
-        "vf-module-label": {
-          "description": "",
-          "required": false,
-          "type": "string"
+        "k8s-rb-config-template-name" : {
+          "description" : "The source of configuration template for ue-reconfiuration operation",
+          "required" : false,
+          "type" : "string"
         },
-        "vf-module-model-invariant-uuid": {
-          "type": "string"
-        },
-        "vf-naming-policy": {
-          "description": "",
-          "required": false,
-          "type": "string",
-          "status": "",
-          "constraints": [
-            {}
-          ],
-          "default": "SDNC_Policy.ONAP_NF_NAMING_TIMESTAMP",
-          "entry_schema": {
-            "type": ""
+        "vf-module-id" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "entry_schema" : {
+            "type" : ""
           }
+        },
+        "vf-module-label" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string"
+        },
+        "vf-module-model-invariant-uuid" : {
+          "type" : "string"
+        },
+        "vf-naming-policy" : {
+          "description" : "",
+          "required" : false,
+          "type" : "string",
+          "status" : "",
+          "constraints" : [ { } ],
+          "default" : "SDNC_Policy.ONAP_NF_NAMING_TIMESTAMP",
+          "entry_schema" : {
+            "type" : ""
+          }
+        },
+        "vf-module-model-version" : {
+          "type" : "string"
         }
       },
-      "derived_from": "tosca.datatypes.Dynamic"
+      "derived_from" : "tosca.datatypes.Dynamic"
     }
   }
 }
