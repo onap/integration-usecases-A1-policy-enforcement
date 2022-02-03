@@ -140,7 +140,7 @@ open class DayOneConfig : AbstractScriptComponentFunction() {
 
                 log.info("Config Template name: $k8sConfigTemplateName")
 
-                val configmapName = "res-default-a1-pe-simulator-app-cm"
+                val configmapName = "res-o-ran-simulator-a1-pe-simulator-app-cm"
                 log.info("configmap retrieved $typOfVfModule vfmodule -> $configmapName")
                 modifyTemplate(configmapName, typOfVfModule)
 
